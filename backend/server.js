@@ -17,24 +17,22 @@ const link = "https://www.youtube.com/watch?v=kagoEGKHZvU&list=PLFGcLQodWjBu1Ybi
 app.get('/download', async (req, res) => {
     console.log("telechargement en cours");
     const video = ytdl(link, { quality: 'highestaudio' });
-    const filePath = "./audio.mp3";
+    const filePath = "assets/music/audio.mp3";
 
     let info = await ytdl.getInfo(link);
     let name = info.player_response.videoDetails.title;
     let duration = info.player_response.streamingData.formats[0].approxDurationMs;
-
-    res.json({
-        title : name,
-        duration : duration
-    });
-
-    imageUrl = `https://i.ytimg.com/vi/${link}/maxresdefault.jpg`;
     
-    // video.pipe(fs.createWriteStream(filePath));
-    // video.on('end', () => {
-    //     console.log("Téléchargement terminé");
-    //     res.status(200).send("Téléchargement terminé");
-    // });
+    const response = {
+        name: name,
+        duration: duration
+    }
+
+    video.pipe(fs.createWriteStream(filePath));
+    video.on('end', () => {
+        console.log("Téléchargement terminé");
+        res.send(response);
+    });
 });
 
 //lancer le serveur
