@@ -8,7 +8,7 @@ let mySqlClient = mysql.createConnection({
     database: "audioplayer_db" 
 });
 
-const request = async () => {
+const request = () => {
     let selectQuery = "DESCRIBE music";
     mySqlClient.query(
         selectQuery,
