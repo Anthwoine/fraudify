@@ -5,6 +5,10 @@ router.get('/', (req, res) => {
     res.send("Voici un message de l'API");
 });
 
+router.post('/', (req, res) => {
+    res.send("Voici un message de l'API (POST)");
+});
+
 // app.get('/post', (req, res) => {
 //     res.json({
 //         message: "Voici un message de l'API"
