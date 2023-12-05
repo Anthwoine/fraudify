@@ -1,13 +1,8 @@
+const { downloadMusic } = require('../controllers/download.controllers');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.send("Voici un message de l'API");
-});
-
-router.post('/', (req, res) => {
-    res.send("Voici un message de l'API (POST)");
-});
+router.post('/', downloadMusic);
 
 // app.get('/post', (req, res) => {
 //     res.json({
@@ -36,5 +31,6 @@ router.post('/', (req, res) => {
 //         res.send(response);
 //     });
 // });
+
 
 module.exports = router;

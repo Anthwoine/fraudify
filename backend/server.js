@@ -3,9 +3,6 @@ const ytdl = require('ytdl-core');
 const axios = require('axios');
 const fs = require('fs');
 
-const request = require('./config/db');
-request();
-
 const port = 5000;
 
 const app = express();
