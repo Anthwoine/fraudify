@@ -1,7 +1,6 @@
-const { addMusicInDB, isMusicInDB } = require('../config/db');
+const { addMusicInDB } = require('../config/db');
 const ytdl = require('ytdl-core');
 const fs = require('fs');
-let mysql = require('mysql');
 
 module.exports.downloadMusic = async (req, res) => {
     console.log("req.body : ", req.body);
@@ -11,24 +10,23 @@ module.exports.downloadMusic = async (req, res) => {
     const artist = req.body.artist;
     const filePath = `assets/music/${title}.mp3`;
 
-    isMusicInDB(url).then((result) => {
-        console.log("result : ", result);
-    });
-
-    res.send("musique ajoutée à la base de données");
-
     const videoInfo = await ytdl.getInfo(url);
     const duration = videoInfo.player_response.videoDetails.lengthSeconds;
 
     const video = ytdl(url, { quality: 'highestaudio' });
     video.pipe(fs.createWriteStream(filePath));
     video.on('end', () => {
-        // console.log("Téléchargement terminé");
-        // addMusicInDB(title, artist, musicDuration(duration), url, filePath).then(() => {
-        //     res.send("musique ajoutée à la base de données");
-        // }).catch((error) => {
-        //     res.send("erreur lors de l'ajout de la musique à la base de données");
-        // });
+        console.log("Téléchargement terminé");
+        addMusicInDB(title, artist, musicDuration(duration), url, filePath).then((result) => {
+            console.log("musique ajoutée à la base de données");
+            res.send(result);
+            return;
+        }).catch((error) => {
+            res.send("erreur lors de l'ajout de la musique à la base de données : " + error.sqlMessage);
+            return;
+        });
+
+        
     });
 }
 

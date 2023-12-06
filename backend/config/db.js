@@ -11,41 +11,23 @@ let mySqlClient = mysql.createConnection({
 });
 
 
-
-const request = () => {
-    let selectQuery = "DESCRIBE music";
-    mySqlClient.query(
-        selectQuery,
-        function (error, result, fields) {
-            if (error) {
-                console.log("Error: ", error);
-                mySqlClient.end();
-            }
-
-            if(result.length > 0) {
-                console.log("Results : \n\n", result);
-            } else {
-                console.log("No results found");
-            }
-            mySqlClient.end();
-        }
-    )
-}
-
 module.exports.addMusicInDB = async (title, artist, duration, url, filePath) => {
-    let insertQuery = "INSERT INTO music (title, artist, duration, url, path) VALUES (?, ?, ?, ?, ?)";
-    mySqlClient.query(
-        insertQuery,
-        [title, artist, duration, url, filePath],
-        function (error, result) {
-            if (error) {
-                console.log("Error : ", error);
-                mySqlClient.end();
+    return new Promise((resolve, reject) => {
+        let insertQuery = "INSERT INTO music (title, artist, duration, url, path) VALUES (?, ?, ?, ?, ?)";
+        mySqlClient.query(
+            insertQuery,
+            [title, artist, duration, url, filePath],
+            function (error, result) {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+
+                resolve(result);
+                return;
             }
-            console.log("Results : ", result);
-            mySqlClient.end();
-        }
-    )
+        )
+    });
 };
 
 module.exports.isMusicInDB = async (url) => {
@@ -55,8 +37,9 @@ module.exports.isMusicInDB = async (url) => {
         [url],
         async function (error, result) {
             if (error) {
-                console.log("Error : ", error);
+                console.log("Error : ", error.sqlMessage);
                 mySqlClient.end();
+                return;
             }
             return await result;
         }
