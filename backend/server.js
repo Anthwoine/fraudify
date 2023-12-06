@@ -13,6 +13,8 @@ app.use(express.urlencoded({ extended: false }));
 
 
 app.use('/download', require('./routes/download.routes'));
+app.use('/music', require('./routes/music.routes'));
+app.use('/music/title', require('./routes/music.routes'));
 
 
 

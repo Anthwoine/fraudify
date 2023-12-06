@@ -78,7 +78,7 @@ module.exports.getMusicFromDBByUrl = async (url) => {
 
 
 module.exports.getMusicFromDBByTitle = async (title) => {
-    return new Promises((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         let selectQuery = "SELECT * FROM music WHERE title = ?";
         mySqlClient.query(
             selectQuery,
@@ -105,6 +105,25 @@ module.exports.getMusicFromDBByArtist = async (artist) => {
         mySqlClient.query(
             selectQuery,
             [artist],
+            function (error, result) {
+                if (error) {
+                    console.log("error : ", error);
+                    reject(error);
+                    return;
+                }
+
+                resolve(result);
+                return;
+            }
+        )
+    });
+};
+
+module.exports.getAllMusicFromDB = async () => {
+    return new Promise((resolve, reject) => {
+        let selectQuery = "SELECT * FROM music";
+        mySqlClient.query(
+            selectQuery,
             function (error, result) {
                 if (error) {
                     console.log("error : ", error);

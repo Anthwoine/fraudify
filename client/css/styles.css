@@ -1,0 +1,21 @@
+#pause-button {
+    display: none;
+}
+
+#player-container {
+    border: 2px solid black;
+    align-items: center;
+    float:bottom;
+}
+
+#track-container {
+    float:bottom;
+}
+
+#track {
+    width: 300px;
+}
+
+#volume {
+    width: 100px;
+}
