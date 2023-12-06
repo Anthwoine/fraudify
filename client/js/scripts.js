@@ -1,3 +1,4 @@
+`start chrome --user-data-dir="C://chrome-dev-disabled-security" --disable-web-security --disable-site-isolation-trials --`
 
 const audio = document.querySelector("audio");
 const track = document.querySelector("#track");
