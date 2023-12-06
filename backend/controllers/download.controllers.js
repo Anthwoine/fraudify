@@ -22,7 +22,12 @@ module.exports.downloadMusic = async (req, res) => {
             res.send(result);
             return;
         }).catch((error) => {
-            res.send("erreur lors de l'ajout de la musique à la base de données : " + error.sqlMessage);
+            if(error.code === 'ER_DUP_ENTRY') {
+                res.status(500).send("cette musique est déjà dans la base de données");
+                return;
+            }
+
+            res.status(500).send("erreur lors de l'ajout de la musique à la base de données : " + error.code);
             return;
         });
 
