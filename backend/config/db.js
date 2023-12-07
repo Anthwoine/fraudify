@@ -53,77 +53,51 @@ module.exports.getMusicFromDBById = async (id) => {
     });
 };
 
-
-
-module.exports.getMusicFromDBByUrl = async (url) => {
-    return new Promise((resolve, reject) => {
-        let selectQuery = "SELECT * FROM music WHERE url = ?";
-        mySqlClient.query(
-            selectQuery,
-            [url],
-            function (error, result) {
-                if (error) {
-                    console.log("error : ", error);
-                    reject(error);
-                    return;
-                }
-
-                resolve(result);
-                return;
-            }
-        )
-    });
-};
-
-
-
-module.exports.getMusicFromDBByTitle = async (title) => {
-    return new Promise((resolve, reject) => {
-        let selectQuery = "SELECT * FROM music WHERE title = ?";
-        mySqlClient.query(
-            selectQuery,
-            [title],
-            function (error, result) {
-                if (error) {
-                    console.log("error : ", error);
-                    reject(error);
-                    return;
-                }
-
-                resolve(result);
-                return;
-            }
-        )
-    });
-};
-
-
-
-module.exports.getMusicFromDBByArtist = async (artist) => {
-    return new Promise((resolve, reject) => {
-        let selectQuery = "SELECT * FROM music WHERE artist = ?";
-        mySqlClient.query(
-            selectQuery,
-            [artist],
-            function (error, result) {
-                if (error) {
-                    console.log("error : ", error);
-                    reject(error);
-                    return;
-                }
-
-                resolve(result);
-                return;
-            }
-        )
-    });
-};
-
 module.exports.getAllMusicFromDB = async () => {
     return new Promise((resolve, reject) => {
         let selectQuery = "SELECT * FROM music";
         mySqlClient.query(
             selectQuery,
+            function (error, result) {
+                if (error) {
+                    console.log("error : ", error);
+                    reject(error);
+                    return;
+                }
+
+                resolve(result);
+                return;
+            }
+        )
+    });
+};
+
+module.exports.deleteMusicFromDB = async (id) => {
+    return new Promise((resolve, reject) => {
+        let deleteQuery = "DELETE FROM music WHERE id = ?";
+        mySqlClient.query(
+            deleteQuery,
+            [id],
+            function (error, result) {
+                if (error) {
+                    console.log("error : ", error);
+                    reject(error);
+                    return;
+                }
+
+                resolve(result);
+                return;
+            }
+        )
+    });
+};
+
+module.exports.updateMusicFromDB = async (id, title, artist, duration, url, filePath) => {
+    return new Promise((resolve, reject) => {
+        let updateQuery = "UPDATE music SET title = ?, artist = ?, duration = ?, url = ?, path = ? WHERE id = ?";
+        mySqlClient.query(
+            updateQuery,
+            [title, artist, duration, url, filePath, id],
             function (error, result) {
                 if (error) {
                     console.log("error : ", error);
