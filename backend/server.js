@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname, '../client')));
-app.use(express.static(path.join(__dirname, '../assets/music')));
+app.use('/assets', express.static(path.join(__dirname, '../assets')));
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
