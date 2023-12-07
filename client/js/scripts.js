@@ -104,7 +104,7 @@ function musicNext() {
         playListMusic = 0;
     }
 
-    const path = "../" + playList[playListMusic].path;
+    const path = "../../" + playList[playListMusic].path;
     const title = playList[playListMusic].title;
     console.log("path : ", path);
     console.log("music : ", title);
@@ -130,7 +130,7 @@ function musicForward() {
         playListMusic = playList.length -1;
     }
 
-    const path = "../" + playList[playListMusic].path;
+    const path = "../../" + playList[playListMusic].path;
     const title = playList[playListMusic].title;
     console.log("path : ", path);
     console.log("music : ",title);

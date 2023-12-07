@@ -17,7 +17,7 @@ module.exports.downloadMusic = async (req, res) => {
     video.pipe(fs.createWriteStream(filePath));
     video.on('end', () => {
         console.log("Téléchargement terminé");
-        addMusicInDB(title, artist, musicDuration(duration), url, filePath).then((result) => {
+        addMusicInDB(title, artist, duration, url, filePath).then((result) => {
             console.log("musique ajoutée à la base de données");
             res.send(result);
             return;
@@ -30,17 +30,32 @@ module.exports.downloadMusic = async (req, res) => {
             res.status(500).send("erreur lors de l'ajout de la musique à la base de données : " + error.code);
             return;
         });
-
-        
     });
 }
 
+module.exports.getMusicInfo = async (req, res) => {
+    const url = req.body.url;
+    ytdl.getInfo(url).then((videoInfo) => {
+        const duration = videoInfo.player_response.videoDetails.lengthSeconds;
+        const title = videoInfo.player_response.videoDetails.title;
+        const response = {
+            title: title,
+            duration: duration + " secondes"
+        }
+        res.send(response);
+        return;
+    }).catch((error) => {
+        res.status(500).send("erreur lors de la récupération des informations de la musique : " + error);
+        return;
+    });
+};
 
 
-function musicDuration (ms) {
-    let minutes = Math.floor(ms / 60000);
-    let seconds = ((ms % 60000) / 1000).toFixed(0);
-    minutes = String(minutes).padStart(2, '0');
-    seconds = String(seconds).padStart(2, '0');
-    return `${minutes}:${seconds}`;
+
+function buildDuration(duration) {
+    let minutes = Math.floor(duration / 60);
+    let reste = duration % 60;
+    let secondes = Math.floor(reste);
+    secondes = String(secondes).padStart(2, "0");
+    return minutes + ":" + secondes;
 }
