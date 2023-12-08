@@ -2,7 +2,9 @@
     margin: 0;
     padding: 0;
     font-family: sans-serif;
+    text-decoration: none;
     box-sizing: border-box;
+    list-style: none;
 }
 
 .container {
@@ -106,4 +108,14 @@ nav .circle {
 
 #pause-button {
     display: none;
+}
+
+.logo {
+    top: 0;
+    left: 0;
+    position: absolute;
+    color: white;
+    font-size: 2em;
+    font-weight: bold;
+    padding: 50px;
 }
