@@ -9,6 +9,7 @@ const pauseButton = document.querySelector("#pause-button");
 const volume = document.querySelector("#volume");
 const volumeValue = document.querySelector("#volume-value");
 const musicTitle = document.querySelector("#music-title")
+const musicArtist = document.querySelector("#music-artist")
 const skipNext = document.querySelector("#skip-next");
 const skipForward = document.querySelector("#skip-forward");
 
@@ -64,12 +65,18 @@ audio.addEventListener("timeupdate", function() {
     }
 
     track.value = this.currentTime;
+    const value = (track.value - track.min) / (track.max - track.min) * 100;
+
+    track.style.background = `linear-gradient(to right, #f9d423 0%, #f9d423 ${value}%, #fff ${value}%, white 100%)`;
     elapsed.textContent = buildDuration(this.currentTime);
 });
 
 
 
 track.addEventListener("input", function() {
+    const value = (this.value - this.min) / (this.max - this.min) * 100;
+    this.style.background = `linear-gradient(to right, #f9d423 0%, #f9d423 ${value}%, #fff ${value}%, white 100%)`;
+
     console.log(this.value);
     elapsed.textContent = buildDuration(this.value);
     audio.currentTime = this.value;
@@ -106,13 +113,19 @@ function musicNext() {
 
     const path = "../../" + playList[playListMusic].path;
     const title = playList[playListMusic].title;
+    const artist = playList[playListMusic].artist;
+
     console.log("path : ", path);
     console.log("music : ", title);
 
     audio.src = path;
     setTitle(title);
+    setArtist(artist);
     
     audio.play();
+    playButton.style.display = "none";
+    pauseButton.style.display = "initial";
+
 
     track.max = audio.duration;
 
@@ -132,13 +145,18 @@ function musicForward() {
 
     const path = "../../" + playList[playListMusic].path;
     const title = playList[playListMusic].title;
+    const artist = playList[playListMusic].artiste;
+
     console.log("path : ", path);
     console.log("music : ",title);
     
     audio.src = path;
     setTitle(title);
+    setArtist(artist);
     
     audio.play();
+    playButton.style.display = "none";
+    pauseButton.style.display = "initial";
 
 
     getDuration()
@@ -153,3 +171,6 @@ function setTitle(title) {
     musicTitle.textContent = title;
 }
 
+function setArtist(artist) {
+    musicArtist.textContent = artist;
+}
