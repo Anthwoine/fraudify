@@ -28,8 +28,6 @@ async function getMusic() {
 
 let playList = await getMusic();
 
-
-
 let getDuration = function() {
     return new Promise((resolve) => {
         audio.addEventListener("loadedmetadata", function() {
@@ -77,7 +75,6 @@ track.addEventListener("input", function() {
     const value = (this.value - this.min) / (this.max - this.min) * 100;
     this.style.background = `linear-gradient(to right, #f9d423 0%, #f9d423 ${value}%, #fff ${value}%, white 100%)`;
 
-    console.log(this.value);
     elapsed.textContent = buildDuration(this.value);
     audio.currentTime = this.value;
 });

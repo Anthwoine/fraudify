@@ -110,10 +110,15 @@ nav .circle {
     display: none;
 }
 
-.logo {
-    top: 0;
-    left: 0;
+.logo-container {
+    top: 10px;
+    left: 10px;
     position: absolute;
+    padding: 20px;
+    background: #267226;
+}
+
+.logo {
     color: white;
     font-size: 2em;
     font-weight: bold;
