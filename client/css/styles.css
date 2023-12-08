@@ -1,10 +1,17 @@
 * {
     margin: 0;
     padding: 0;
-    font-family: sans-serif;
-    text-decoration: none;
     box-sizing: border-box;
+    font-family: 'poppins', sans-serif;
+    text-decoration: none;
     list-style: none;
+}
+
+body {
+    min-height: 100vh;
+    background: #333;
+    display: grid;
+    place-items: center;
 }
 
 .container {
@@ -18,10 +25,64 @@
 }
 
 .music-player {
-    background: #e3e0ff;
+    position: relative;
     width: 400px;
+    height: 550px;
+
+    background: #566573;
+    border-radius: 18px;
     padding: 25px 35px;
     text-align: center;
+    overflow: hidden;
+}
+
+.music-player .top-bar .options {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-80px);
+    transition: 0.5s;
+}
+
+.music-player .top-bar .active2 {
+    transform: translateY(0px);
+}
+
+.music-player .top-bar .options-button {
+    margin: 0 10px;
+    height: 40px;
+    width: 40px;
+    font-size: 18px;
+}
+
+.music-player .top-bar {
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.music-player .top-bar .top-bar-button {
+    z-index: 20;
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    font-size: 25px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.08);
+    box-shadow: 0.1px 8px 8px 2px rgba(0, 0, 0, 0.2);
+}
+
+.music-player .top-bar .top-bar-button:hover,  .main-button:hover {
+    background: linear-gradient(to right, #FF5722, #FF7043);
+    box-shadow: 0.1px 8px 8px 2px rgba(0, 0, 0, 0.2) inset,
+                0.1px 8px 8px 2px rgba(0, 0, 0, 0.2);
 }
 
 nav {
@@ -30,7 +91,7 @@ nav {
     margin-bottom: 30px;
 }
 
-nav .circle {
+nav .main-button {
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -86,7 +147,7 @@ nav .circle {
     align-items: center;
 }
 
-.controls .circle {
+.controls .main-button {
     width: 40px;
     height: 40px;
     margin: 20px;
@@ -100,7 +161,7 @@ nav .circle {
     cursor: pointer;
 }
 
-.controls .circle:nth-child(2), .controls .circle:nth-child(3) {
+.controls .main-button:nth-child(2), .controls .main-button:nth-child(3) {
     transform: scale(1.5);
     background: #314ef5;
     color: #fff;
@@ -115,7 +176,6 @@ nav .circle {
     left: 10px;
     position: absolute;
     padding: 20px;
-    background: #267226;
 }
 
 .logo {
@@ -124,3 +184,80 @@ nav .circle {
     font-weight: bold;
     padding: 50px;
 }
+
+
+
+
+
+.playlist {
+    position: absolute;
+    bottom: 0;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    background: #F66F73;
+    max-height: 0px;
+    overflow: hidden;
+    transition: 0.5s;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.playlist .p-song {
+    position: relative;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 10px;
+    transition: 0.5s;
+    cursor: pointer;
+    padding: 12px 12px 20px 12px;
+    box-shadow: 0.1px 8px 8px 2px rgba(0, 0, 0, 0.1);
+}
+
+.playlist .p-song:not(:first-child) {
+    margin-top: 20px;
+
+}
+
+.playlist .p-song #p-title {
+    font-size: 20px;
+}
+
+.playlist .p-song #p-artist {
+    position: absolute;
+    bottom: 6px;
+    left: 15px;
+    font-size: 11px;
+}
+
+
+.playlist .p-song .playlist-button {
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    font-size: 80px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: 0.5s;
+    margin: 0 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.08);
+    box-shadow: 0.1px 8px 8px 2px rgba(0, 0, 0, 0.2);
+}
+
+
+.playlist .p-song:hover {
+    background: #1C2833;
+}
+
+.playlist .p-song:hover .playlist-button {
+    background: #FF5722;
+}
+
+.

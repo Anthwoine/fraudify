@@ -171,3 +171,15 @@ function setTitle(title) {
 function setArtist(artist) {
     musicArtist.textContent = artist;
 }
+
+
+
+
+
+
+let playlist = document.querySelector('.playlist');
+let playlistButton = document.querySelector('#playlist-button');
+
+playlistButton.addEventListener('click', function() {
+    playlist.classList.togle
+});
