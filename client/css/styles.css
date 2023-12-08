@@ -36,8 +36,6 @@ nav .circle {
     background: #fff;
     color: #314ef5;
     box-shadow: 0 5px 10px rgba(87, 26, 255, 0.22);
-
-
 }
 
 .music-player h1 {
@@ -77,6 +75,33 @@ nav .circle {
     height: 6px;
     border-radius: 4px;
     margin: 40px 0;
+    cursor: pointer;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.controls .circle {
+    width: 40px;
+    height: 40px;
+    margin: 20px;
+    background: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;    
+    color: #314ef5;
+    box-shadow: 0 5px 10px rgba(87, 26, 255, 0.22);
+    cursor: pointer;
+}
+
+.controls .circle:nth-child(2), .controls .circle:nth-child(3) {
+    transform: scale(1.5);
+    background: #314ef5;
+    color: #fff;
 }
 
 #pause-button {
