@@ -25,6 +25,9 @@ let repeatBtn = document.querySelector(".repeat-track");
 
 let currentTrack = document.createElement("audio");
 
+let playlistPlayButtons = document.querySelectorAll(".playlist-play-button");
+
+
 let trackIndex = 0;
 let volumeValue = 0.5
 let isPlaying = false;
@@ -53,8 +56,25 @@ const image = "../../assets/images/default.png";
 
 builPlaylist(trackList);
 loadTrack(trackList[trackIndex]);
+playlist.children[trackIndex].classList.toggle("song-active");
 
-console.log("parent : ", playlist.parentElement);
+
+playlist.addEventListener("click", function (event) {
+    const target = event.target;
+    console.log(target);
+    if(target.classList.contains("playlist-play-button")){
+        console.log("playlist-play-button");
+        playlist.children[trackIndex].classList.toggle("song-active");
+        trackIndex = target.id;
+        console.log(trackIndex);
+        playlist.children[trackIndex].classList.toggle("song-active");
+
+        loadTrack(trackList[trackIndex]);
+        isPlaying = true;
+        playPauseBtn.innerHTML = '<i class="bi bi-pause-circle-fill" ></i>';
+        currentTrack.play();
+    }
+});
 
 
 
@@ -174,15 +194,19 @@ playlistBtn.addEventListener("click", function () {
 
 
 const prevTrack = function () {
+    playlist.children[trackIndex].classList.toggle("song-active");
     trackIndex--;
     if (trackIndex < 0) {
         trackIndex = trackList.length - 1;
     }
+    playlist.children[trackIndex].classList.toggle("song-active");
+
     loadTrack(trackList[trackIndex]);
     isPlaying ? currentTrack.play() : currentTrack.pause();
 };
 
 const nextTrack = function () {
+    playlist.children[trackIndex].classList.toggle("song-active");
     if (isRandom) {
         trackIndex = Math.floor(Math.random() * trackList.length);
     } else {
@@ -191,6 +215,7 @@ const nextTrack = function () {
             trackIndex = 0;
         }
     }
+    playlist.children[trackIndex].classList.toggle("song-active");
 
     loadTrack(trackList[trackIndex]);
     isPlaying ? currentTrack.play() : currentTrack.pause();
@@ -214,7 +239,7 @@ function loadTrack(track) {
     artist.textContent = track.artist;
     trackSlider.max = track.duration;
     trackArt.style.backgroundImage = `url(${image})`;
-    playlist.children[trackIndex].classList
+
 
 
     currentTime.textContent = "0:00";
@@ -228,7 +253,7 @@ function builPlaylist(tracklist) {
         newSong.innerHTML = `
                 <p class="p-title">${tracklist[i].title}</p>
                 <p class="p-artist">${tracklist[i].artist}</p>
-                <i class="bi bi-play-circle-fill" style="font-size: 3rem"></i>`;
+                <i id="${i}" class="bi bi-play-circle-fill playlist-play-button" style="font-size: 3rem"></i>`;
         playlist.appendChild(newSong);
     }
 }

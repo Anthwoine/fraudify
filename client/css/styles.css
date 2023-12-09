@@ -25,6 +25,8 @@ body {
     padding: 30px;
     border-radius: 20px;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    height: 80vh;
+    position: absolute;
     overflow: hidden;
 }
 
@@ -220,15 +222,20 @@ body {
     opacity: 1.0;
 }
 
+
+
+
 .playlist {
+    margin: 0 0 0 -30px;
     position: absolute;
     bottom: 0;
     z-index: 10;
-    width: 40%;
-    height: 100%;
-    background: #fd0000;
-    max-height: 0px;
-    overflow: hidden;
+    width: 100%;
+    height: 85%;
+    background: #fff;
+    max-height: 0%;
+    overflow-x: hidden;
+    overflow-y: scroll;
     transition: 0.5s;
     display: flex;
     align-items: center;
@@ -240,6 +247,7 @@ body {
     padding: 100px 0 0 0;
 }
 
+
 .playlist .p-song {
     position: relative;
     width: 80%;
@@ -250,11 +258,8 @@ body {
     transition: 0.5s;
     cursor: pointer;
     padding: 12px 12px 20px 12px;
-    /* box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px; */
-}
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 
-.playlist .p-song:first-child {
-    margin-top: 150px;
 }
 
 .playlist .p-song:not(:first-child) {
@@ -282,7 +287,6 @@ body {
 }
 
 .playlist .p-song:hover {
-    background: #fff;
     color: #000;
 }
 
@@ -290,6 +294,7 @@ body {
     opacity: 1.0;
 }
 
-.wrapper .active .playlist {
-    max-height: 100%;
+
+.song-active {
+    background: green;
 }
