@@ -1,6 +1,12 @@
 `start chrome --user-data-dir="C://chrome-dev-disabled-security" --disable-web-security --disable-site-isolation-trials --`
 
 
+let optionsBtn = document.querySelector(".options-button");
+let options = document.querySelector(".options");
+
+let playlistBtn = document.querySelector(".playlist-button");
+let playlist = document.querySelector(".playlist");
+
 let trackArt = document.querySelector(".track-art");
 let title = document.querySelector(".title");
 let artist = document.querySelector(".artist");
@@ -28,6 +34,7 @@ let isMute = false;
 
 console.log("scripts.js");
 
+
 volumeSlider.value = 0.5;
 currentTrack.volume = volumeSlider.value;
 
@@ -45,21 +52,12 @@ const trackList = await getMusic();
 const image = "../../assets/images/default.png";
 console.log("trackList : ", trackList);
 
+builPlaylist(trackList);
 loadTrack(trackList[trackIndex]);
 
-//charger une musique
-function loadTrack(track) {
-    currentTrack.src = `../../assets/music/${track.title}.mp3`;
-    currentTrack.load();
-    title.textContent = track.title;
-    artist.textContent = track.artist;
-    trackSlider.max = track.duration;
-    trackArt.style.backgroundImage = `url(${image})`;
+console.log("playlist : ", playlist.children[trackIndex]);
 
 
-    currentTime.textContent = "0:00";
-    totalDuration.textContent = buildDuration(track.duration);
-}
 
 
 //gestion de la lecture
@@ -136,6 +134,8 @@ currentTrack.addEventListener("ended", function () {
     if (isRepeat) {
         loadTrack(trackList[trackIndex]);
         currentTrack.play();
+    } else {
+        nextTrack();
     }
 });
 
@@ -182,7 +182,7 @@ const nextTrack = function () {
     isPlaying ? currentTrack.play() : currentTrack.pause();
 };
 
-
+//construire la durée de la musique
 function buildDuration(duration) {
     let minutes = Math.floor(duration / 60);
     let reste = duration % 60;
@@ -190,3 +190,32 @@ function buildDuration(duration) {
     secondes = String(secondes).padStart(2, "0");
     return minutes + ":" + secondes;
 }
+
+
+//charger une musique
+function loadTrack(track) {
+    currentTrack.src = `../../assets/${track.title}.mp3`;
+    currentTrack.load();
+    title.textContent = track.title;
+    artist.textContent = track.artist;
+    trackSlider.max = track.duration;
+    trackArt.style.backgroundImage = `url(${image})`;
+    playlist.children[trackIndex].classList.toggle
+
+
+    currentTime.textContent = "0:00";
+    totalDuration.textContent = buildDuration(track.duration);
+}
+
+function builPlaylist(tracklist) {
+    for (let i = 0; i < tracklist.length; i++) {
+        const newSong = document.createElement("div");
+        newSong.className = "p-song";
+        newSong.innerHTML = `
+                <p class="p-title">${tracklist[i].title}</p>
+                <p class="p-artist">${tracklist[i].artist}</p>
+                <i class="bi bi-play-circle-fill" style="font-size: 2rem"></i>`;
+        playlist.appendChild(newSong);
+    }
+}
+
