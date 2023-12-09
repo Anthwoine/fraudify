@@ -1,5 +1,10 @@
 `start chrome --user-data-dir="C://chrome-dev-disabled-security" --disable-web-security --disable-site-isolation-trials --`
 
+const LASTFM_API_KEY = "03ba2d7bf27a0b9b9c11b8a6d767c4ef";
+const SHARED_SECRET = "839319fafcffbd4846766f0e1e624cbf";
+
+const apiKey = '03ba2d7bf27a0b9b9c11b8a6d767c4ef';
+
 
 let optionsBtn = document.querySelector(".options-button");
 let options = document.querySelector(".options");
@@ -55,8 +60,10 @@ const trackList = await getMusic();
 const image = "../../assets/images/default.png";
 
 builPlaylist(trackList);
-loadTrack(trackList[trackIndex]);
+await loadTrack(trackList[trackIndex]);
 playlist.children[trackIndex].classList.toggle("song-active");
+
+console.log('music ready');
 
 
 playlist.addEventListener("click", function (event) {
@@ -232,13 +239,16 @@ function buildDuration(duration) {
 
 
 //charger une musique
-function loadTrack(track) {
+async function loadTrack(track) {
     currentTrack.src = `../../assets/music/${track.title}.mp3`;
     currentTrack.load();
     title.textContent = track.title;
     artist.textContent = track.artist;
     trackSlider.max = track.duration;
-    trackArt.style.backgroundImage = `url(${image})`;
+
+    const img = await getTrackInfo(track.artist, track.title);
+    console.log(img);
+    trackArt.style.backgroundImage = img ? `url(${img})` : `url(${image})`;
 
 
 
@@ -257,4 +267,39 @@ function builPlaylist(tracklist) {
         playlist.appendChild(newSong);
     }
 }
+
+
+
+
+
+
+async function getTrackInfo(artist, trackName) {
+    try {
+        const url = new URL('http://ws.audioscrobbler.com/2.0/');
+        const params = {
+            method: 'track.getInfo',
+            artist,
+            track: trackName,
+            api_key: apiKey,
+            format: 'json',
+        };
+        url.search = new URLSearchParams(params).toString();
+
+        const response = await fetch(url.toString());
+        const data = await response.json();
+
+        const img = data.track.album.image.find(image => image.size === 'extralarge')['#text'];
+        return img
+
+        // Vous pouvez extraire les images ou d'autres informations ici
+    } catch (error) {
+        return
+    }
+}
+
+// Exemple d'utilisation
+
+
+
+
 
