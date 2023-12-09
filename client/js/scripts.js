@@ -40,7 +40,7 @@ currentTrack.volume = volumeSlider.value;
 
 const getMusic = async function () {
     try {
-        const response = await fetch(`https://fraudify.aegir.ovh/music`);
+        const response = await fetch(`/music`);
         const music = await response.json();
         return music;
     } catch (error) {
@@ -50,12 +50,11 @@ const getMusic = async function () {
 
 const trackList = await getMusic();
 const image = "../../assets/images/default.png";
-console.log("trackList : ", trackList);
 
 builPlaylist(trackList);
 loadTrack(trackList[trackIndex]);
 
-console.log("playlist : ", playlist.children[trackIndex]);
+console.log("parent : ", playlist.parentElement);
 
 
 
@@ -86,7 +85,7 @@ trackSlider.addEventListener("input", function () {
 
 //gestion du volume
 volumeSlider.addEventListener("input", function () {
-    if (this.value <= 0.01) {
+    if (this.value < 0.01) {
         volumeIcon.className = "bi bi-volume-mute-fill bi3em";
     } else if (this.value < 0.5) {
         volumeIcon.className = "bi bi-volume-down-fill bi3em";
@@ -107,7 +106,7 @@ volumeIcon.addEventListener("click", function () {
         currentTrack.volume = 0;
     } else {
         isMute = false;
-        volumeIcon.className = volumeValue >= 0.5 ? "bi bi-volume-up-fill bi3em" : volumeValue <= 0.01 ? "bi bi-volume-mute-fill bi3em" : "bi bi-volume-down-fill bi3em";
+        volumeIcon.className = volumeValue >= 0.5 ? "bi bi-volume-up-fill bi3em" : volumeValue < 0.01 ? "bi bi-volume-mute-fill bi3em" : "bi bi-volume-down-fill bi3em";
         volumeSlider.value = volumeValue;
         currentTrack.volume = volumeValue;
     }
@@ -158,6 +157,21 @@ randomBtn.addEventListener("click", function () {
 });
 
 
+//afficher les options
+optionsBtn.addEventListener("click", function () {
+    console.log("options");
+
+    options.classList.toggle("active2");
+    console.log(options.classList);
+});
+
+playlistBtn.addEventListener("click", function () {
+    console.log("playlist");
+    playlist.classList.toggle("active");
+});
+
+
+
 
 const prevTrack = function () {
     trackIndex--;
@@ -194,13 +208,13 @@ function buildDuration(duration) {
 
 //charger une musique
 function loadTrack(track) {
-    currentTrack.src = `../../assets/${track.title}.mp3`;
+    currentTrack.src = `../../assets/music/${track.title}.mp3`;
     currentTrack.load();
     title.textContent = track.title;
     artist.textContent = track.artist;
     trackSlider.max = track.duration;
     trackArt.style.backgroundImage = `url(${image})`;
-    playlist.children[trackIndex].classList.toggle
+    playlist.children[trackIndex].classList
 
 
     currentTime.textContent = "0:00";
@@ -214,7 +228,7 @@ function builPlaylist(tracklist) {
         newSong.innerHTML = `
                 <p class="p-title">${tracklist[i].title}</p>
                 <p class="p-artist">${tracklist[i].artist}</p>
-                <i class="bi bi-play-circle-fill" style="font-size: 2rem"></i>`;
+                <i class="bi bi-play-circle-fill" style="font-size: 3rem"></i>`;
         playlist.appendChild(newSong);
     }
 }

@@ -17,6 +17,7 @@ body {
     flex-direction: column;
     justify-content: center;
     margin-top: 20px;
+    overflow: hidden;
 }
 
 .wrapper {
@@ -223,7 +224,7 @@ body {
     position: absolute;
     bottom: 0;
     z-index: 10;
-    width: 200px;
+    width: 40%;
     height: 100%;
     background: #fd0000;
     max-height: 0px;
@@ -234,7 +235,7 @@ body {
     flex-direction: column;
 }
 
-.wrapper .active {
+.active {
     max-height: 100%;
     padding: 100px 0 0 0;
 }
@@ -250,6 +251,10 @@ body {
     cursor: pointer;
     padding: 12px 12px 20px 12px;
     /* box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px; */
+}
+
+.playlist .p-song:first-child {
+    margin-top: 150px;
 }
 
 .playlist .p-song:not(:first-child) {
