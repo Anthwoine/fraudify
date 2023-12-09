@@ -17,6 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 //définition des dossiers statiques
 app.use(express.static(path.join(__dirname, '../client')));
 app.use('/assets', express.static(path.join(__dirname, '../assets')));
+app.use('/js/scripts.js', express.static(path.join(__dirname, '../client/js/scripts.js')));
 
 
 //autoriser les requêtes cross-origin

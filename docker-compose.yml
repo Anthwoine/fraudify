@@ -1,0 +1,67 @@
+version: "3.8"
+
+services:
+  fraudify:
+    image: fraudify:latest
+    container_name: fraudify
+    ports:
+      - "5000:5000"
+    networks:
+      - "default"
+      - "traefik"
+    volumes:
+      - ./assets:/app/assets
+    environment:
+      - HOST=https://fraudify.aegir.ovh/
+      - SQL_USER=audioplayer
+      - SQL_PASSWORD=audioplayer
+      - SQL_DATABASE=audioplayer_db
+      - SQL_HOST=fraudify_db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.fraudify.loadbalancer.server.port=5000"
+      - "traefik.http.routers.fraudify.entrypoints=https"
+    depends_on:
+      - fraudify_db
+
+  fraudify_db:
+    image: mariadb:latest
+    container_name: fraudify_db
+    restart: unless-stopped
+    networks:
+      - "default"
+    environment:
+      - MYSQL_ROOT_USER=root
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=audioplayer_db
+      - MYSQL_USER=audioplayer
+      - MYSQL_PASSWORD=audioplayer
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  fraudify_phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: fraudify_phpmyadmin
+    networks:
+      - "default"
+      - "traefik"
+    environment:
+      PMA_HOST: fraudify_db
+      PMA_USER: audioplayer
+      PMA_PASSWORD: audioplayer
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.fraudify_db.loadbalancer.server.port=80"
+      - "traefik.http.routers.fraudify_db.entrypoints=https"
+    depends_on:
+      - fraudify_db
+
+volumes:
+  mysql-data:
+
+networks:
+  default:
+    driver: bridge
+  traefik:
+    driver: bridge
+    external: true

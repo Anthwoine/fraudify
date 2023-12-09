@@ -31,9 +31,9 @@ console.log("scripts.js");
 volumeSlider.value = 0.5;
 currentTrack.volume = volumeSlider.value;
 
-const getMusic = async function() {
+const getMusic = async function () {
     try {
-        const response = await fetch(`http://localhost:5000/music`);
+        const response = await fetch(`https://fraudify.aegir.ovh/music`);
         const music = await response.json();
         return music;
     } catch (error) {
@@ -49,7 +49,7 @@ loadTrack(trackList[trackIndex]);
 
 //charger une musique
 function loadTrack(track) {
-    currentTrack.src = "../../" + track.path;
+    currentTrack.src = `../../assets/music/${track.title}.mp3`;
     currentTrack.load();
     title.textContent = track.title;
     artist.textContent = track.artist;
@@ -63,8 +63,8 @@ function loadTrack(track) {
 
 
 //gestion de la lecture
-playPauseBtn.addEventListener("click", function() {
-    if(!isPlaying) {
+playPauseBtn.addEventListener("click", function () {
+    if (!isPlaying) {
         currentTrack.play();
         isPlaying = true;
         this.innerHTML = '<i class="bi bi-pause-circle-fill" ></i>';
@@ -77,7 +77,7 @@ playPauseBtn.addEventListener("click", function() {
 
 
 
-trackSlider.addEventListener("input", function() {
+trackSlider.addEventListener("input", function () {
     console.log(this.value);
     currentTime.textContent = buildDuration(this.value);
     currentTrack.currentTime = this.value;
@@ -87,10 +87,10 @@ trackSlider.addEventListener("input", function() {
 });
 
 //gestion du volume
-volumeSlider.addEventListener("input", function() {
-    if(this.value <= 0.01) {
+volumeSlider.addEventListener("input", function () {
+    if (this.value <= 0.01) {
         volumeIcon.className = "bi bi-volume-mute-fill bi3em";
-    } else if(this.value < 0.5) {
+    } else if (this.value < 0.5) {
         volumeIcon.className = "bi bi-volume-down-fill bi3em";
     } else {
         volumeIcon.className = "bi bi-volume-up-fill bi3em";
@@ -101,8 +101,8 @@ volumeSlider.addEventListener("input", function() {
     currentTrack.volume = this.value;
 });
 
-volumeIcon.addEventListener("click", function() {
-    if(!isMute) {
+volumeIcon.addEventListener("click", function () {
+    if (!isMute) {
         isMute = true;
         volumeIcon.className = "bi bi-volume-mute-fill bi3em";
         volumeSlider.value = 0;
@@ -117,13 +117,13 @@ volumeIcon.addEventListener("click", function() {
 
 
 //update de la durée de la musique
-currentTrack.addEventListener("timeupdate", function() {
+currentTrack.addEventListener("timeupdate", function () {
     trackSlider.value = this.currentTime;
     currentTime.textContent = buildDuration(this.currentTime);
 });
 
-repeatBtn.addEventListener("click", function() {
-    if(!isRepeat) {
+repeatBtn.addEventListener("click", function () {
+    if (!isRepeat) {
         isRepeat = true;
         repeatBtn.innerHTML = '<i class="bi bi-repeat-1 bi3em"></i>';
     } else {
@@ -132,48 +132,48 @@ repeatBtn.addEventListener("click", function() {
     }
 });
 
-currentTrack.addEventListener("ended", function() {
-    if(isRepeat) {
+currentTrack.addEventListener("ended", function () {
+    if (isRepeat) {
         loadTrack(trackList[trackIndex]);
         currentTrack.play();
     }
 });
 
-prevBtn.addEventListener("click", function() {
-    if(currentTrack.currentTime > 5) {
+prevBtn.addEventListener("click", function () {
+    if (currentTrack.currentTime > 5) {
         currentTrack.currentTime = 0;
     } else {
         prevTrack();
     }
 });
 
-nextBtn.addEventListener("click", function() {
+nextBtn.addEventListener("click", function () {
     nextTrack();
 });
 
-randomBtn.addEventListener("click", function() {
+randomBtn.addEventListener("click", function () {
     this.style.color = isRandom ? "black" : "green";
     isRandom = !isRandom;
-    
+
 });
 
 
 
-const prevTrack = function() {
+const prevTrack = function () {
     trackIndex--;
-    if(trackIndex < 0) {
-        trackIndex = trackList.length -1;
+    if (trackIndex < 0) {
+        trackIndex = trackList.length - 1;
     }
     loadTrack(trackList[trackIndex]);
     isPlaying ? currentTrack.play() : currentTrack.pause();
 };
 
-const nextTrack = function() {
-    if(isRandom) {
+const nextTrack = function () {
+    if (isRandom) {
         trackIndex = Math.floor(Math.random() * trackList.length);
     } else {
         trackIndex++;
-        if(trackIndex >= trackList.length) {
+        if (trackIndex >= trackList.length) {
             trackIndex = 0;
         }
     }
