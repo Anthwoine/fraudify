@@ -8,6 +8,7 @@ const port = 5000;
 
 const app = express();
 
+
 //définition des middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -30,7 +31,6 @@ app.use((req, res, next) => {
 app.use('/download', require('./routes/download.routes'));
 app.use('/music', require('./routes/music.routes'));
 app.use('/music/title', require('./routes/music.routes'));
-
 
 
 //lancer le serveur
