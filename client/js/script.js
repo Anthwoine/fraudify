@@ -29,7 +29,7 @@ let playlistPlayButtons = document.querySelectorAll(".playlist-play-button");
 let trackList;
 
 let trackIndex = 0;
-let volumeValue = 0.2;
+let volumeValue = 0.05;
 
 let isPlaying = false;
 let isRandom = false;
@@ -43,7 +43,7 @@ trackList = await getMusic();
 const image = "../../assets/images/default.png";
 
 
-volumeSlider.value = 0.2;
+volumeSlider.value = volumeValue;
 currentTrack.volume = volumeSlider.value;
 setVolumeIcon(volumeSlider.value);
 
@@ -313,7 +313,7 @@ async function getMusic() {
         const music = await response.json();
         return music;
     } catch (error) {
-        console.log("error : ", error);
+        return;
     }
 }
 
