@@ -35,7 +35,11 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    min-height: 400px;
+    height: 400px;
 }
+
+
 
 .track-art {
     margin: 25px;
@@ -79,7 +83,8 @@ body {
 .bi-play-circle-fill,
 .bi-pause-circle-fill,
 .bi-repeat,
-.bi-repeat-1 {
+.bi-repeat-1,
+.bi-arrow-left-right {
     padding: 25px;
     opacity: 0.7;
     transition: opacity 0.2s ease-in-out;   
@@ -93,7 +98,8 @@ body {
 .bi-pause-circle-fill:hover,
 .bi-arrow-clockwise:hover,
 .bi-repeat:hover,
-.bi-repeat-1:hover {
+.bi-repeat-1:hover,
+.bi-arrow-left-right:hover{
     opacity: 1.0;
 }
 
@@ -242,6 +248,10 @@ body {
     flex-direction: column;
 }
 
+.playlist::-webkit-scrollbar {
+    display: none;
+}
+
 .active {
     max-height: 100%;
     padding: 100px 0 0 0;
@@ -263,7 +273,11 @@ body {
 }
 
 .playlist .p-song:not(:first-child) {
-    margin-top: 20px;
+    margin-top: 30px;
+}
+
+.playlist .p-song:last-child {
+    margin-bottom: 20px;
 }
 
 .playlist .p-song .p-title{
@@ -288,6 +302,14 @@ body {
 
 .playlist .p-song:hover {
     color: #000;
+}
+
+.playlist .song-active:hover {
+    background: hotpink;
+}
+
+.playlist .p-song:hover:not(.song-active) {
+    background: #8a1b1b;
 }
 
 .playlist .p-song i:hover {

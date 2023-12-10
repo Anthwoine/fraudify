@@ -180,8 +180,13 @@ nextBtn.addEventListener("click", function () {
 
 //musique random
 randomBtn.addEventListener("click", function () {
-    this.style.color = isRandom ? "black" : "green";
     isRandom = !isRandom;
+    if(isRandom){
+        this.innerHTML = '<i class="bi bi-shuffle bi3em"></i>';
+    } else {
+        this.innerHTML = '<i class="bi bi-arrow-left-right bi3em"></i>';
+    }
+    
 
 });
 
