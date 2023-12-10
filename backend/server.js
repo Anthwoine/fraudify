@@ -1,8 +1,6 @@
 const express = require('express');
-const ytdl = require('ytdl-core');
-const axios = require('axios');
 const path = require('path');
-const fs = require('fs');
+
 
 const port = 5000;
 
@@ -28,11 +26,22 @@ app.use((req, res, next) => {
 });
 
 
+
+
 //définition des routes
 app.use('/download', require('./routes/download.routes'));
-app.use('/music', require('./routes/music.routes'));
-app.use('/music/title', require('./routes/music.routes'));
 
+app.use('/image', require('./routes/image.routes'));
+
+app.use('/music', require('./routes/music.routes'));
+
+
+
+//route 404
+app.use((req, res, next) => {
+    //res.status(404).redirect('404.html');
+    next();
+});
 
 //lancer le serveur
 app.listen(port, () => console.log("Le serveur a démarré au port : " + port));

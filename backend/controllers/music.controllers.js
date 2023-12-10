@@ -1,4 +1,3 @@
-const { get } = require('mongoose');
 const { getMusicFromDBById, getMusicFromDBByUrl, getMusicFromDBByArtist, getMusicFromDBByTitle, getAllMusicFromDB } = require('../config/db');
 
 
@@ -8,7 +7,7 @@ const { getMusicFromDBById, getMusicFromDBByUrl, getMusicFromDBByArtist, getMusi
 
 module.exports.getAllMusicFromDB = async (req, res) => {
     getAllMusicFromDB().then((result) => {
-        if(result.length === 0) {
+        if (result.length === 0) {
             res.status(500).send("aucune musique trouvée");
             return;
         }
@@ -23,13 +22,13 @@ module.exports.getAllMusicFromDB = async (req, res) => {
 
 
 module.exports.getMusicFromDBById = async (req, res) => {
-    if(!req.params.id) {
+    if (!req.params.id) {
         res.status(500).send("id manquant");
         return;
     }
 
     getMusicFromDBById(req.params.id).then((result) => {
-        if(result.length === 0) {
+        if (result.length === 0) {
             res.status(500).send("aucune musique trouvée avec cet id");
             return;
         }
@@ -44,13 +43,13 @@ module.exports.getMusicFromDBById = async (req, res) => {
 
 
 module.exports.deleteMusicFromDB = async (req, res) => {
-    if(!req.params.id) {
+    if (!req.params.id) {
         res.status(500).send("id manquant");
         return;
     }
 
     getMusicFromDBById(req.params.id).then((result) => {
-        if(result.length === 0) {
+        if (result.length === 0) {
             res.status(500).send("aucune musique trouvée avec cet id");
             return;
         }
@@ -71,13 +70,13 @@ module.exports.deleteMusicFromDB = async (req, res) => {
 
 module.exports.updateMusicFromDB = async (req, res) => {
     const params = !req.params.id || !req.body.title || !req.body.artist || !req.body.duration || !req.body.url || !req.body.filePath;
-    if(params) {
+    if (params) {
         res.status(500).send("id manquant");
         return;
     }
 
     getMusicFromDBById(req.params.id).then((result) => {
-        if(result.length === 0) {
+        if (result.length === 0) {
             res.status(500).send("aucune musique trouvée avec cet id");
             return;
         }
@@ -94,3 +93,6 @@ module.exports.updateMusicFromDB = async (req, res) => {
         return;
     });
 };
+
+
+

@@ -1,10 +1,4 @@
-`start chrome --user-data-dir="C://chrome-dev-disabled-security" --disable-web-security --disable-site-isolation-trials --`
-
-const LASTFM_API_KEY = "03ba2d7bf27a0b9b9c11b8a6d767c4ef";
-const SHARED_SECRET = "839319fafcffbd4846766f0e1e624cbf";
-
-const apiKey = '03ba2d7bf27a0b9b9c11b8a6d767c4ef';
-
+let wrapper = document.querySelector(".wrapper");
 
 let optionsBtn = document.querySelector(".options-button");
 let options = document.querySelector(".options");
@@ -32,48 +26,48 @@ let currentTrack = document.createElement("audio");
 
 let playlistPlayButtons = document.querySelectorAll(".playlist-play-button");
 
+let trackList;
 
 let trackIndex = 0;
-let volumeValue = 0.5
+let volumeValue = 0.2;
+
 let isPlaying = false;
 let isRandom = false;
 let isRepeat = false;
 let isMute = false;
 
-console.log("scripts.js");
+trackList = await getMusic();
 
 
-volumeSlider.value = 0.5;
-currentTrack.volume = volumeSlider.value;
 
-const getMusic = async function () {
-    try {
-        const response = await fetch(`/music`);
-        const music = await response.json();
-        return music;
-    } catch (error) {
-        console.log("error : ", error);
-    }
-}
-
-const trackList = await getMusic();
 const image = "../../assets/images/default.png";
 
-builPlaylist(trackList);
-await loadTrack(trackList[trackIndex]);
-playlist.children[trackIndex].classList.toggle("song-active");
 
-console.log('music ready');
+volumeSlider.value = 0.2;
+currentTrack.volume = volumeSlider.value;
+setVolumeIcon(volumeSlider.value);
+
+if(!trackList) {
+    wrapper.style.display = "none";
+} else {
+    await loadTrack(trackList[trackIndex]);
+    builPlaylist(trackList);
+
+    playlist.children[trackIndex].classList.toggle("song-active");
+    console.log('music ready');
+}
 
 
+
+
+
+
+//gestion de la playlist
 playlist.addEventListener("click", function (event) {
     const target = event.target;
-    console.log(target);
     if(target.classList.contains("playlist-play-button")){
-        console.log("playlist-play-button");
         playlist.children[trackIndex].classList.toggle("song-active");
         trackIndex = target.id;
-        console.log(trackIndex);
         playlist.children[trackIndex].classList.toggle("song-active");
 
         loadTrack(trackList[trackIndex]);
@@ -100,9 +94,8 @@ playPauseBtn.addEventListener("click", function () {
 });
 
 
-
+//gestion du slider de la musique
 trackSlider.addEventListener("input", function () {
-    console.log(this.value);
     currentTime.textContent = buildDuration(this.value);
     currentTrack.currentTime = this.value;
 
@@ -119,12 +112,12 @@ volumeSlider.addEventListener("input", function () {
     } else {
         volumeIcon.className = "bi bi-volume-up-fill bi3em";
     }
-
-    console.log(this.value);
     volumeValue = this.value;
     currentTrack.volume = this.value;
 });
 
+
+//gestion du mute
 volumeIcon.addEventListener("click", function () {
     if (!isMute) {
         isMute = true;
@@ -146,6 +139,8 @@ currentTrack.addEventListener("timeupdate", function () {
     currentTime.textContent = buildDuration(this.currentTime);
 });
 
+
+//gestion du repeat
 repeatBtn.addEventListener("click", function () {
     if (!isRepeat) {
         isRepeat = true;
@@ -156,6 +151,8 @@ repeatBtn.addEventListener("click", function () {
     }
 });
 
+
+//passer à la musique suivante quand la musique en cours est terminée
 currentTrack.addEventListener("ended", function () {
     if (isRepeat) {
         loadTrack(trackList[trackIndex]);
@@ -165,6 +162,8 @@ currentTrack.addEventListener("ended", function () {
     }
 });
 
+
+//passer à la musique précédente
 prevBtn.addEventListener("click", function () {
     if (currentTrack.currentTime > 5) {
         currentTrack.currentTime = 0;
@@ -173,10 +172,13 @@ prevBtn.addEventListener("click", function () {
     }
 });
 
+//passer à la musique suivante
 nextBtn.addEventListener("click", function () {
     nextTrack();
 });
 
+
+//musique random
 randomBtn.addEventListener("click", function () {
     this.style.color = isRandom ? "black" : "green";
     isRandom = !isRandom;
@@ -186,20 +188,16 @@ randomBtn.addEventListener("click", function () {
 
 //afficher les options
 optionsBtn.addEventListener("click", function () {
-    console.log("options");
-
     options.classList.toggle("active2");
-    console.log(options.classList);
 });
 
 playlistBtn.addEventListener("click", function () {
-    console.log("playlist");
     playlist.classList.toggle("active");
 });
 
 
 
-
+//passer à la musique précédente
 const prevTrack = function () {
     playlist.children[trackIndex].classList.toggle("song-active");
     trackIndex--;
@@ -212,6 +210,7 @@ const prevTrack = function () {
     isPlaying ? currentTrack.play() : currentTrack.pause();
 };
 
+//passer à la musique suivante
 const nextTrack = function () {
     playlist.children[trackIndex].classList.toggle("song-active");
     if (isRandom) {
@@ -246,16 +245,18 @@ async function loadTrack(track) {
     artist.textContent = track.artist;
     trackSlider.max = track.duration;
 
-    const img = await getTrackInfo(track.artist, track.title);
-    console.log(img);
+    currentTime.textContent = "0:00";
+    totalDuration.textContent = buildDuration(track.duration);
+
+    let img = await getImage(track);
     trackArt.style.backgroundImage = img ? `url(${img})` : `url(${image})`;
 
 
 
-    currentTime.textContent = "0:00";
-    totalDuration.textContent = buildDuration(track.duration);
+
 }
 
+//construire la playlist
 function builPlaylist(tracklist) {
     for (let i = 0; i < tracklist.length; i++) {
         const newSong = document.createElement("div");
@@ -268,36 +269,53 @@ function builPlaylist(tracklist) {
     }
 }
 
-
-
-
-
-
-async function getTrackInfo(artist, trackName) {
-    try {
-        const url = new URL('http://ws.audioscrobbler.com/2.0/');
-        const params = {
-            method: 'track.getInfo',
-            artist,
-            track: trackName,
-            api_key: apiKey,
-            format: 'json',
-        };
-        url.search = new URLSearchParams(params).toString();
-
-        const response = await fetch(url.toString());
-        const data = await response.json();
-
-        const img = data.track.album.image.find(image => image.size === 'extralarge')['#text'];
-        return img
-
-        // Vous pouvez extraire les images ou d'autres informations ici
-    } catch (error) {
-        return
+//changer l'icone du volume
+function setVolumeIcon(volume) {
+    if (volume < 0.01) {
+        volumeIcon.className = "bi bi-volume-mute-fill bi3em";
+    } else if (volume < 0.5) {
+        volumeIcon.className = "bi bi-volume-down-fill bi3em";
+    } else {
+        volumeIcon.className = "bi bi-volume-up-fill bi3em";
     }
 }
 
-// Exemple d'utilisation
+//récupérer l'image de la musique
+async function getImage(track) {
+    const artist = track.artist;
+    const title = track.title;
+
+    const requestData = {
+        artist : artist,
+        title : title
+    }
+
+    try {
+        const response = await fetch(`/image`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData),
+        });
+        const data = await response.json();
+        return data.img;
+    } catch (error) {
+        return;
+    }
+
+}
+
+
+async function getMusic() {
+    try {
+        const response = await fetch(`/music`);
+        const music = await response.json();
+        return music;
+    } catch (error) {
+        console.log("error : ", error);
+    }
+}
 
 
 
