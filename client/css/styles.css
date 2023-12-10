@@ -242,7 +242,7 @@ body {
     max-height: 0%;
     overflow-x: hidden;
     overflow-y: scroll;
-    transition: 0.5s;
+    transition: 0.7s;
     display: flex;
     align-items: center;
     flex-direction: column;
