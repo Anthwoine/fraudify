@@ -47,7 +47,7 @@ volumeSlider.value = volumeValue;
 currentTrack.volume = volumeSlider.value;
 setVolumeIcon(volumeSlider.value);
 
-if(!trackList) {
+if (!trackList || trackList.length === 0) {
     wrapper.style.display = "none";
 } else {
     await loadTrack(trackList[trackIndex]);
@@ -65,7 +65,7 @@ if(!trackList) {
 //gestion de la playlist
 playlist.addEventListener("click", function (event) {
     const target = event.target;
-    if(target.classList.contains("playlist-play-button")){
+    if (target.classList.contains("playlist-play-button")) {
         playlist.children[trackIndex].classList.toggle("song-active");
         trackIndex = target.id;
         playlist.children[trackIndex].classList.toggle("song-active");
@@ -286,8 +286,8 @@ async function getImage(track) {
     const title = track.title;
 
     const requestData = {
-        artist : artist,
-        title : title
+        artist: artist,
+        title: title
     }
 
     try {
