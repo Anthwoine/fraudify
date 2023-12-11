@@ -42,8 +42,8 @@ body {
 
 .track-art {
     margin: 25px;
-    height: 150px;
-    width: 150px;
+    height: 250px;
+    width: 250px;
     border: 2px solid #fff;
     background-size: cover;
     background-position: center;
@@ -318,4 +318,53 @@ body {
 
 .song-active {
     background: green;
+}
+
+
+@media screen and (max-width: 412px) {
+    .logo-container{
+        display: none;
+    }
+
+
+
+    .player {
+    }
+
+
+
+    .wrapper {
+        width: 100%;
+        height: 80%;
+        margin-top: 100px;
+    }
+
+    .bi3em {
+        font-size: 1.75rem;
+    }
+
+    .bi-play-circle-fill,
+    .bi-pause-circle-fill {
+        font-size: 2.5rem;
+    }
+
+
+
+    .buttons {
+        margin-top: 10px;
+        justify-content: center;
+    }
+
+
+    .bi-shuffle,
+    .bi-skip-start-fill,
+    .bi-skip-end-fill,
+    .bi-play-circle-fill,
+    .bi-pause-circle-fill,
+    .bi-repeat,
+    .bi-repeat-1,
+    .bi-arrow-left-right {
+        margin-top: 50px;
+        padding: 15px;
+    }
 }
