@@ -51,7 +51,7 @@ if (!trackList || trackList.length === 0) {
     wrapper.style.display = "none";
 } else {
     await loadTrack(trackList[trackIndex]);
-    builPlaylist(trackList);
+    await builPlaylist(trackList);
 
     playlist.children[trackIndex].classList.toggle("song-active");
     console.log('music ready');
@@ -262,14 +262,21 @@ async function loadTrack(track) {
 }
 
 //construire la playlist
-function builPlaylist(tracklist) {
+async function builPlaylist(tracklist) {
     for (let i = 0; i < tracklist.length; i++) {
         const newSong = document.createElement("div");
+        const img = await getImage(tracklist[i]);
+        console.log(img);
         newSong.className = "p-song";
         newSong.innerHTML = `
-                <p class="p-title">${tracklist[i].title}</p>
-                <p class="p-artist">${tracklist[i].artist}</p>
+                <div class="playlist-art"></div>
+                <div class="playlist-details">
+                    <p class="p-title">${tracklist[i].title}</p>
+                    <p class="p-artist">${tracklist[i].artist}</p>
+                </div>
                 <i id="${i}" class="bi bi-play-circle-fill playlist-play-button" style="font-size: 3rem"></i>`;
+        newSong.children[0].style.backgroundImage = img ? `url(${img})` : `url(${image})`;
+        
         playlist.appendChild(newSong);
     }
 }
