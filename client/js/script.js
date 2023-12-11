@@ -325,6 +325,5 @@ async function getMusic() {
 
 
 
-// FM_API_KEY = 03ba2d7bf27a0b9b9c11b8a6d767c4ef
-// SHARED_SECRET = "839319fafcffbd4846766f0e1e624cbf";
+
 

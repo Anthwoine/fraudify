@@ -1,6 +1,4 @@
--- SQLBook: Code
--- Active: 1701723882491@@127.0.0.1@3306@audioplayer_db
-
+-- Active: 1701782970574@@127.0.0.1@3306@audioplayer_db
 
 DROP TABLE if EXISTS user;
 CREATE TABLE user (
@@ -59,5 +57,6 @@ SHOW tables;
 
 
 select * from music;
+select * from user;
 
 select * from music where title = 'DiE4u';

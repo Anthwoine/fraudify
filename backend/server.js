@@ -35,13 +35,14 @@ app.use('/image', require('./routes/image.routes'));
 
 app.use('/music', require('./routes/music.routes'));
 
+app.use('/user', require('./routes/user.routes'));
 
 
-//route 404
-app.use((req, res, next) => {
-    //res.status(404).redirect('404.html');
-    next();
-});
+
+// //route 404
+// app.use((req, res, next) => {
+//     res.status(404).redirect('404.html'); 
+// });
 
 //lancer le serveur
 app.listen(port, () => console.log("Le serveur a démarré au port : " + port));
