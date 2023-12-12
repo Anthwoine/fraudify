@@ -9,7 +9,7 @@ const app = express();
 
 //définition des middlewares
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 
 //définition des dossiers statiques
@@ -36,6 +36,8 @@ app.use('/image', require('./routes/image.routes'));
 app.use('/music', require('./routes/music.routes'));
 
 app.use('/user', require('./routes/user.routes'));
+
+app.use('/login', require('./routes/login.routes'));
 
 
 

@@ -99,3 +99,11 @@ label a {
     text-decoration: none;
     color: #fff;
 }
+
+.bottom a:hover {
+    text-decoration: underline;
+}
+
+.inputbox .bi-lock {
+    cursor: pointer;
+}
