@@ -277,7 +277,7 @@ async function builPlaylist(tracklist) {
                 <div class="playlist-art"></div>
                 <div class="playlist-details">
                     <p class="p-title">${tracklist[i].title}</p>
-                    <p class="p-artist">${tracklist[i].artist}</p>
+                    <p class="p-artist">${tracklist[i].artist} - ${buildDuration(trackList[i].duration)}</p>
                 </div>
                 <i id="${i}" class="bi bi-play-circle-fill playlist-play-button" style="font-size: 3rem"></i>`;
         newSong.children[0].style.backgroundImage = img ? `url(${img})` : `url(${image})`;

@@ -41,7 +41,7 @@ module.exports.login = async (req, res) => {
             const user = result[0];
             if(await validatePassword(password, user.password)) {
                 const token = getJWT(user);
-                res.status(200).send({token : token});
+                res.status(200).send({access_token : token});
                 return;
             } else {
                 res.status(500).send("mdp incorrect");

@@ -1,12 +1,17 @@
 const express = require('express');
 const path = require('path');
+const cookieParser = require('cookie-parser');
+
 const authentification = require('./middleware/authentification');
+
 
 
 const port = 5000;
 
 const app = express();
 
+//utilisation des cookies
+app.use(cookieParser());
 
 //définition des middlewares
 app.use(express.json());
@@ -44,10 +49,10 @@ app.use('/signup', require('./routes/signup.routes'));
 
 
 
-// //route 404
-// app.use((req, res, next) => {
-//     res.status(404).redirect('404.html'); 
-// });
+//route 404
+app.use((req, res, next) => {
+    res.status(404).redirect('404.html'); 
+});
 
 //lancer le serveur
 app.listen(port, () => console.log("Le serveur a démarré au port : " + port));
