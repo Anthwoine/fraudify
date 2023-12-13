@@ -1,4 +1,6 @@
 const bcrypt = require('bcrypt');
+const { getUserFromDBByUsername } = require('../config/db');
+const { validateID } = require('ytdl-core');
 
 const saltRounds = 10;
 
@@ -8,7 +10,7 @@ const cryptedPassword = async (password) => {
     return hash;
 };
 
-const validetaPassword = async (password, hash) => {
+const validatePassword = async (password, hash) => {
     const res = await bcrypt.compare(password, hash);
     return res;
 };
@@ -22,14 +24,26 @@ module.exports.login = async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
-    const hash = await cryptedPassword(password);
-    console.log("hash : ", hash);
+    getUserFromDBByUsername(username)
+        .then(async (result) => {
+            console.log("result : ", result);
 
-    const valide = await validetaPassword(username, hash);
-    console.log("valide : ", valide);
-    
-    res.status(200);
+            if(result.length === 0) {
+                res.status(500).send("utilisateur non trouvé");
+                return;
+            }
+        
+            if(await validatePassword(password, result[0].password)) {
+                res.status(200).send("utilisateur connecté");
+                return;
+            } else {
+                res.status(500).send("mdp incorrect");
+                return;
+            }
 
+        }).catch((error) => {
+            res.status(500).send("erreur lors de la connexion de l'utilisateur : " + error.code);
+        });   
 };
 
 

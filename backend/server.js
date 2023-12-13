@@ -39,6 +39,8 @@ app.use('/user', require('./routes/user.routes'));
 
 app.use('/login', require('./routes/login.routes'));
 
+app.use('/signup', require('./routes/signup.routes'));
+
 
 
 // //route 404
