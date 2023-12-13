@@ -3,7 +3,10 @@ const ytdl = require('ytdl-core');
 const fs = require('fs');
 
 module.exports.downloadMusic = async (req, res) => {
-    console.log("req.body : ", req.body);
+    if(!req.body.url || !req.body.title || !req.body.artist) {
+        res.status(400).send("Bad request");
+        return;
+    }
 
     const url = req.body.url;
     const title = req.body.title;
@@ -13,15 +16,22 @@ module.exports.downloadMusic = async (req, res) => {
     const videoInfo = await ytdl.getInfo(url);
     const duration = videoInfo.player_response.videoDetails.lengthSeconds;
 
-    const video = ytdl(url, { quality: 'highestaudio' });
-    video.pipe(fs.createWriteStream(filePath));
-    video.on('end', () => {
-        console.log("Téléchargement terminé");
-        addMusicInDB(title, artist, duration, url, filePath).then((result) => {
+    addMusicInDB(title, artist, duration, url, filePath)
+        .then((result) => {
             console.log("musique ajoutée à la base de données");
-            res.send(result);
-            return;
-        }).catch((error) => {
+            const video = ytdl(url, { quality: 'highestaudio' });
+            video.on('end', () => {
+                console.log("Téléchargement terminé");
+                res.send(result);
+                return;
+            });
+
+            video.on('error', () => {
+                res.send("erreur lors du téléchargement");
+                return;
+            })
+        })
+        .catch((error) => {
             if(error.code === 'ER_DUP_ENTRY') {
                 res.status(500).send("cette musique est déjà dans la base de données");
                 return;
@@ -29,8 +39,8 @@ module.exports.downloadMusic = async (req, res) => {
 
             res.status(500).send("erreur lors de l'ajout de la musique à la base de données : " + error.code);
             return;
-        });
-    });
+        }
+    );
 }
 
 module.exports.getMusicInfo = async (req, res) => {
@@ -49,13 +59,3 @@ module.exports.getMusicInfo = async (req, res) => {
         return;
     });
 };
-
-
-
-function buildDuration(duration) {
-    let minutes = Math.floor(duration / 60);
-    let reste = duration % 60;
-    let secondes = Math.floor(reste);
-    secondes = String(secondes).padStart(2, "0");
-    return minutes + ":" + secondes;
-}

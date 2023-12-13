@@ -1,6 +1,11 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+
 const { getUserFromDBByUsername } = require('../config/db');
-const { validateID } = require('ytdl-core');
+
+
+
 
 const saltRounds = 10;
 
@@ -32,9 +37,11 @@ module.exports.login = async (req, res) => {
                 res.status(500).send("utilisateur non trouvé");
                 return;
             }
-        
-            if(await validatePassword(password, result[0].password)) {
-                res.status(200).send("utilisateur connecté");
+            
+            const user = result[0];
+            if(await validatePassword(password, user.password)) {
+                const token = getJWT(user);
+                res.status(200).send({token : token});
                 return;
             } else {
                 res.status(500).send("mdp incorrect");
@@ -42,8 +49,20 @@ module.exports.login = async (req, res) => {
             }
 
         }).catch((error) => {
-            res.status(500).send("erreur lors de la connexion de l'utilisateur : " + error.code);
+            res.status(500).send("erreur lors de la connexion de l'utilisateur : " + error);
         });   
+};
+
+
+getJWT = (user) => {
+    const payload = {
+        id: user.id,
+        username: user.username,
+        role: user.role
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+    return token; 
 };
 
 

@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const authentification = require('./middleware/authentification');
 
 
 const port = 5000;
@@ -29,7 +30,7 @@ app.use((req, res, next) => {
 
 
 //définition des routes
-app.use('/download', require('./routes/download.routes'));
+app.use('/download', authentification, require('./routes/download.routes'));
 
 app.use('/image', require('./routes/image.routes'));
 

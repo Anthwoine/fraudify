@@ -244,8 +244,13 @@ function buildDuration(duration) {
 
 //charger une musique
 async function loadTrack(track) {
-    currentTrack.src = `../../assets/music/${track.title}.mp3`;
-    currentTrack.load();
+    try {
+        currentTrack.src = `../../assets/music/${track.title}.mp3`;
+        currentTrack.load();
+    } catch(error) {
+        nextTrack();
+    }
+
     title.textContent = track.title;
     artist.textContent = track.artist;
     trackSlider.max = track.duration;
