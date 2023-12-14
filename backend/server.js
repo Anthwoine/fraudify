@@ -35,24 +35,24 @@ app.use((req, res, next) => {
 
 
 //définition des routes
-app.use('/download', authentification, require('./routes/download.routes'));
+app.use('/api/download', authentification, require('./routes/download.routes'));
 
-app.use('/image', require('./routes/image.routes'));
+app.use('/api/image', require('./routes/image.routes'));
 
-app.use('/music', require('./routes/music.routes'));
+app.use('/api/music', require('./routes/music.routes'));
 
-app.use('/user', require('./routes/user.routes'));
+app.use('/api/user', require('./routes/user.routes'));
 
-app.use('/login', require('./routes/login.routes'));
+app.use('/api/login', require('./routes/login.routes'));
 
-app.use('/signup', require('./routes/signup.routes'));
+app.use('/api/signup', require('./routes/signup.routes'));
 
 
 
 //route 404
-app.use((req, res, next) => {
-    res.status(404).redirect('404.html'); 
-});
+app.all('*', (req, res) => { 
+    res.status(404).send('<h1>404! Page not found</h1>'); 
+}); 
 
 //lancer le serveur
 app.listen(port, () => console.log("Le serveur a démarré au port : " + port));

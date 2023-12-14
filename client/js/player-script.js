@@ -248,6 +248,7 @@ async function loadTrack(track) {
         currentTrack.src = `../../assets/music/${track.title}.mp3`;
         currentTrack.load();
     } catch(error) {
+        console.log("loadtrack error : ",error);
         nextTrack();
     }
 
@@ -308,7 +309,7 @@ async function getImage(track) {
     }
 
     try {
-        const response = await fetch(`/image`, {
+        const response = await fetch(`/api/image`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -326,7 +327,7 @@ async function getImage(track) {
 
 async function getMusic() {
     try {
-        const response = await fetch(`/music`);
+        const response = await fetch(`/api/music`);
         const music = await response.json();
         return music;
     } catch (error) {
