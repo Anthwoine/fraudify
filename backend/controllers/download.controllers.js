@@ -20,6 +20,7 @@ module.exports.downloadMusic = async (req, res) => {
         .then((result) => {
             console.log("musique ajoutée à la base de données");
             const video = ytdl(url, { quality: 'highestaudio' });
+            video.pipe(fs.createWriteStream(filePath));
             video.on('end', () => {
                 console.log("Téléchargement terminé");
                 res.send(result);
