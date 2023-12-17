@@ -43,9 +43,8 @@ trackList = await getMusic();
 const image = "../../assets/images/default.png";
 
 
-volumeSlider.value = volumeValue;
-currentTrack.volume = volumeSlider.value;
-setVolumeIcon(volumeSlider.value);
+updateVolume(volumeValue);
+
 
 if (!trackList || trackList.length === 0) {
     wrapper.style.display = "none";
@@ -98,22 +97,11 @@ playPauseBtn.addEventListener("click", function () {
 trackSlider.addEventListener("input", function () {
     currentTime.textContent = buildDuration(this.value);
     currentTrack.currentTime = this.value;
-
-    // const value = (this.value - this.min) / (this.max - this.min) * 100;
-    // this.style.background = `linear-gradient(to right, ##83a9ff 0%, ##83f9ff ${value}%, #fff ${value}%, white 100%)`;
 });
 
 //gestion du volume
 volumeSlider.addEventListener("input", function () {
-    if (this.value < 0.01) {
-        volumeIcon.className = "bi bi-volume-mute-fill bi3em";
-    } else if (this.value < 0.5) {
-        volumeIcon.className = "bi bi-volume-down-fill bi3em";
-    } else {
-        volumeIcon.className = "bi bi-volume-up-fill bi3em";
-    }
-    volumeValue = this.value;
-    currentTrack.volume = this.value;
+    updateVolume(this.value);
 });
 
 
@@ -121,14 +109,11 @@ volumeSlider.addEventListener("input", function () {
 volumeIcon.addEventListener("click", function () {
     if (!isMute) {
         isMute = true;
-        volumeIcon.className = "bi bi-volume-mute-fill bi3em";
-        volumeSlider.value = 0;
-        currentTrack.volume = 0;
+        volumeValue = volumeSlider.value;
+        updateVolume(0);
     } else {
         isMute = false;
-        volumeIcon.className = volumeValue >= 0.5 ? "bi bi-volume-up-fill bi3em" : volumeValue < 0.01 ? "bi bi-volume-mute-fill bi3em" : "bi bi-volume-down-fill bi3em";
-        volumeSlider.value = volumeValue;
-        currentTrack.volume = volumeValue;
+        updateVolume(volumeValue);
     }
 });
 
@@ -137,6 +122,9 @@ volumeIcon.addEventListener("click", function () {
 currentTrack.addEventListener("timeupdate", function () {
     trackSlider.value = this.currentTime;
     currentTime.textContent = buildDuration(this.currentTime);
+
+    const value = (trackSlider.value - trackSlider.min) / (trackSlider.max - trackSlider.min) * 100;
+    trackSlider.style.background = `linear-gradient(to right, green 0%, green ${value}%, #83a9ff ${value}%, #83a9ff 100%)`;
 });
 
 
@@ -332,6 +320,16 @@ async function getMusic() {
     } catch (error) {
         return;
     }
+}
+
+
+function updateVolume(volumeValue) {
+    volumeSlider.value = volumeValue;
+    currentTrack.volume = volumeValue;
+    setVolumeIcon(volumeValue);
+
+    const value = (volumeSlider.value - volumeSlider.min) / (volumeSlider.max - volumeSlider.min) * 100;
+    volumeSlider.style.background = `linear-gradient(to right, green 0%, green ${value}%, #83a9ff ${value}%, #83a9ff 100%)`;
 }
 
 
