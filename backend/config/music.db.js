@@ -1,27 +1,13 @@
-require('dotenv').config();
-let mysql = require('mysql');
+const client = require('./db');
 
-
-// local mysql db connection
-let mySqlClient = mysql.createConnection({
-    host: process.env.SQL_HOST,
-    user: process.env.SQL_USER,
-    password: process.env.SQL_PASSWORD,
-    database: process.env.SQL_DATABASE
-});
-
-module.exports = mySqlClient;
-
-
-
-module.exports.addMusicInDB = async (title, artist, duration, url, filePath) => {
+module.exports.getAllDBMusic = async () => {
     return new Promise((resolve, reject) => {
-        let insertQuery = "INSERT INTO music (title, artist, duration, url, path) VALUES (?, ?, ?, ?, ?)";
-        mySqlClient.query(
-            insertQuery,
-            [title, artist, duration, url, filePath],
+        let selectQuery = "SELECT * FROM music";
+        client.query(
+            selectQuery,
             function (error, result) {
                 if (error) {
+                    console.log("error : ", error);
                     reject(error);
                     return;
                 }
@@ -31,14 +17,12 @@ module.exports.addMusicInDB = async (title, artist, duration, url, filePath) => 
             }
         )
     });
-};
+}
 
-
-
-module.exports.getMusicFromDBById = async (id) => {
+module.exports.getDBMusicById = async (id) => {
     return new Promise((resolve, reject) => {
         let selectQuery = "SELECT * FROM music WHERE id = ?";
-        mySqlClient.query(
+        client.query(
             selectQuery,
             [id],
             function (error, result) {
@@ -53,13 +37,15 @@ module.exports.getMusicFromDBById = async (id) => {
             }
         )
     });
-};
 
-module.exports.getAllMusicFromDB = async () => {
+}
+
+module.exports.getDBMusicById = async (id) => {
     return new Promise((resolve, reject) => {
-        let selectQuery = "SELECT * FROM music";
-        mySqlClient.query(
+        let selectQuery = "SELECT * FROM music WHERE id = ?";
+        client.query(
             selectQuery,
+            [id],
             function (error, result) {
                 if (error) {
                     console.log("error : ", error);
@@ -72,12 +58,12 @@ module.exports.getAllMusicFromDB = async () => {
             }
         )
     });
-};
+}
 
-module.exports.deleteMusicFromDB = async (id) => {
+module.exports.deleteDBMusic = async (id) => {
     return new Promise((resolve, reject) => {
         let deleteQuery = "DELETE FROM music WHERE id = ?";
-        mySqlClient.query(
+        client.query(
             deleteQuery,
             [id],
             function (error, result) {
@@ -92,12 +78,32 @@ module.exports.deleteMusicFromDB = async (id) => {
             }
         )
     });
-};
+}
 
-module.exports.updateMusicFromDB = async (id, title, artist, duration, url, filePath) => {
+module.exports.addDBMusic = async (title, artist, duration, url, filePath) => {
+    return new Promise((resolve, reject) => {
+        let insertQuery = "INSERT INTO music (title, artist, duration, url, path) VALUES (?, ?, ?, ?, ?)";
+        client.query(
+            insertQuery,
+            [title, artist, duration, url, filePath],
+            function (error, result) {
+                if (error) {
+                    console.log("error : ", error);
+                    reject(error);
+                    return;
+                }
+
+                resolve(result);
+                return;
+            }
+        )
+    });
+}
+
+module.exports.updateDBMusic = async (id, title, artist, duration, url, filePath) => {
     return new Promise((resolve, reject) => {
         let updateQuery = "UPDATE music SET title = ?, artist = ?, duration = ?, url = ?, path = ? WHERE id = ?";
-        mySqlClient.query(
+        client.query(
             updateQuery,
             [title, artist, duration, url, filePath, id],
             function (error, result) {
@@ -112,47 +118,4 @@ module.exports.updateMusicFromDB = async (id, title, artist, duration, url, file
             }
         )
     });
-};
-
-
-
-
-
-module.exports.addUserInDB = async (username, password, email) => {
-    return new Promise((resolve, reject) => {
-        let insertQuery = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
-        mySqlClient.query(
-            insertQuery,
-            [username, password, email],
-            function (error, result) {
-                if (error) {
-                    reject(error);
-                    return;
-                }
-
-                resolve(result);
-                return;
-            }
-        )
-    });
-};
-
-module.exports.getUserFromDBByUsername = async (username) => {
-    return new Promise((resolve, reject) => {
-        let selectQuery = "SELECT u.username, u.password FROM user as u WHERE username = ?";
-        mySqlClient.query(
-            selectQuery,
-            [username],
-            function (error, result) {
-                if (error) {
-                    console.log("error : ", error);
-                    reject(error);
-                    return;
-                }
-
-                resolve(result);
-                return;
-            }
-        )
-    });
-};
+}

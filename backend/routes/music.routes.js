@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const { getMusicFromDBById, getAllMusicFromDB, deleteMusicFromDB, updateMusicFromDB } = require('../controllers/music.controllers');
+const { getMusicById, getAllMusic, deleteMusic, updateMusic } = require('../controllers/music.controllers');
 
-router.get('/', getAllMusicFromDB);
+router.get('/', getAllMusic);
 
-router.get('/:id', getMusicFromDBById);
-router.delete('/:id', deleteMusicFromDB);
-router.put('/:id', updateMusicFromDB);
+router.get('/:id', getMusicById);
+router.delete('/:id', deleteMusic);
+router.put('/:id', updateMusic);
 
 
 

@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 
-const authentification = require('./middleware/authentification');
+const authentification = require('./middlewares/authentification');
 
 
 
