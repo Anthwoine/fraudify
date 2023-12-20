@@ -9,11 +9,7 @@ const { getUserFromDBByUsername } = require('../config/db');
 
 const saltRounds = 10;
 
-const cryptedPassword = async (password) => {
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hash = await bcrypt.hash(password, salt);
-    return hash;
-};
+
 
 const validatePassword = async (password, hash) => {
     const res = await bcrypt.compare(password, hash);
@@ -54,7 +50,7 @@ module.exports.login = async (req, res) => {
 };
 
 
-getJWT = (user) => {
+const getJWT = (user) => {
     const payload = {
         id: user.id,
         username: user.username,
