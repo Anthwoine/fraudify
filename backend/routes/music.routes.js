@@ -8,7 +8,7 @@ router.get('/:id?', getMusicById);
 router.delete('/:id?', deleteMusic);
 router.put('/:id?', updateMusic);
 router.post('/download', downloadMusic);
-router.get('/info', getMusicInfo)
+router.post('/info', getMusicInfo)
 
 
 

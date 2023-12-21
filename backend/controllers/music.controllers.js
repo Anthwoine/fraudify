@@ -133,9 +133,14 @@ module.exports.getMusicInfo = async (req, res) => {
     ytdl.getInfo(url).then((videoInfo) => {
         const duration = videoInfo.player_response.videoDetails.lengthSeconds;
         const title = videoInfo.player_response.videoDetails.title;
+        const author = videoInfo.player_response.videoDetails.author;
+        const image = videoInfo.player_response.videoDetails.thumbnail.thumbnails[0].url;
+        
         const response = {
             title: title,
-            duration: duration + " secondes"
+            artist: author,
+            duration: duration + " secondes",
+            image: image
         }
         res.send(response);
         return;
