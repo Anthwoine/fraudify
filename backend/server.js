@@ -35,17 +35,11 @@ app.use((req, res, next) => {
 
 
 //définition des routes
-app.use('/api/download', authentification, require('./routes/download.routes'));
-
 app.use('/api/image', require('./routes/image.routes'));
 
 app.use('/api/music', require('./routes/music.routes'));
 
 app.use('/api/user', require('./routes/user.routes'));
-
-app.use('/api/login', require('./routes/login.routes'));
-
-app.use('/api/signup', require('./routes/signup.routes'));
 
 
 

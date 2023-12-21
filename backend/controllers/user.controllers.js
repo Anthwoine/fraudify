@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 
 const { getAllDBUser, getDBUserByUsername, addDBUser, updateDBUserById } = require("../config/user.db");
 
-const salt = 10;
+const saltRounds = 10;
 
 
 
