@@ -127,10 +127,13 @@ module.exports.login = async (req, res) => {
             console.log("result : ", result);
 
             if(result.length === 0) {
-                res.status(500).send("utilisateur non trouvé");
+                console.log("utilisateur non trouvé");
+                res.status(500).send({message: "utilisateur non trouvé"});
                 return;
             }
             
+            console.log("result[0] : ", result[0])
+
             const user = result[0];
             if(await validatePassword(password, user.password)) {
                 const token = getJWT(user);
