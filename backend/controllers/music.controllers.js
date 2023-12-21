@@ -106,7 +106,7 @@ module.exports.downloadMusic = async (req, res) => {
             video.pipe(fs.createWriteStream(filePath));
 
             video.on('end', () => {
-                fetchImage(title, artist);
+                fetchImage(title, artist, true);
                 console.log("Téléchargement terminé");
                 res.send(result);
                 return;
@@ -132,7 +132,7 @@ module.exports.downloadMusic = async (req, res) => {
 
 module.exports.getMusicInfo = async (req, res) => {
     const url = req.body.url;
-    ytdl.getInfo(url).then((videoInfo) => {
+    ytdl.getInfo(url).then(async (videoInfo) => {
         const duration = videoInfo.player_response.videoDetails.lengthSeconds;
         const title = videoInfo.player_response.videoDetails.title;
         const author = videoInfo.player_response.videoDetails.author;
@@ -144,7 +144,7 @@ module.exports.getMusicInfo = async (req, res) => {
             duration: duration + " secondes",
             image: image
         }
-        res.send(response);
+        res.json(response);
         return;
     }).catch((error) => {
         res.status(500).send("erreur lors de la récupération des informations de la musique : " + error);
@@ -173,7 +173,7 @@ const downloadImage = async (imageUrl, title, artist) => {
 }   
 
 
-async function fetchImage(title, artist) {
+async function fetchImage(title, artist, download) {
     try {
         const url = new URL('http://ws.audioscrobbler.com/2.0/');
         const api_key = process.env.FM_API_KEY;
@@ -193,10 +193,19 @@ async function fetchImage(title, artist) {
             const images = data.track.album.image;
             const img = images.length > 0 ? images[images.length - 1]['#text'] : null;
             
-            if(img) {
+            if(img && download) {
+                console.log("image trouvée dowload...");
                 console.log(img);
                 downloadImage(img, title, artist);
+            } else if(img){
+                console.log("image trouvée");
+                return img;
+            } else {
+                console.log("image non trouvée");
+                return null;
             }
+        } else {
+            return null;
         }
     } catch (error) {
         console.error("Erreur:", error);

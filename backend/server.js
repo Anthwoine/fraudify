@@ -42,7 +42,6 @@ app.use('/api/music', require('./routes/music.routes'));
 app.use('/api/user', require('./routes/user.routes'));
 
 
-
 //route 404
 app.all('*', (req, res) => { 
     res.status(404).send('<h1>404! Page not found</h1>'); 

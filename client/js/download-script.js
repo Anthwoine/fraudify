@@ -5,10 +5,6 @@ const url = document.querySelector('#url');
 
 const img = document.querySelector('.track-art');
 
-const title = document.querySelector('.title');
-const artist = document.querySelector('.artist');
-const duration = document.querySelector('.duration');
-
 search.addEventListener('click', async () => {
     console.log('search');
 
@@ -17,25 +13,31 @@ search.addEventListener('click', async () => {
         alert('Veuillez entrer une url');
         return;
     }
-    const result = await fetch('api/music/info', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ url: urlValue }),
-    });
 
-    const data = await result.json();
+    console.log(urlValue);
+    console.log('loading...')
+    const data = await loadInfoTrack(urlValue);
     console.log(data);
 
-    console.log("data ok");
-
-    if(img) {
-        img.style.backgroundImage = `url(${data.image})`;
-    }
-
-    title.textContent = `Title: ${data.title}`;
-    artist.textContent = `Artist: ${data.artist}`;
-    duration.textContent = `Duration: ${data.duration}`;
-    
+    img.style.backgroundImage = `url(${data.image})`;
 });
+
+
+const loadInfoTrack = async (url) => {
+    try {
+        const result = await fetch('api/music/info', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ url: url }),
+        });
+    
+        const data = await result.json();
+        return data;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+    
+}
