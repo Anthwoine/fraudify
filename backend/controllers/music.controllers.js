@@ -1,6 +1,7 @@
 const { getAllDBMusic, getDBMusicById, deleteDBMusicById, addDBMusic, updateDBMusicById, updateDBMusic } = require('../config/music.db');
 const ytdl = require('ytdl-core');
 const fs = require('fs');
+const path = require('path');
 
 
 
@@ -105,6 +106,7 @@ module.exports.downloadMusic = async (req, res) => {
             video.pipe(fs.createWriteStream(filePath));
 
             video.on('end', () => {
+                fetchImage(title, artist);
                 console.log("Téléchargement terminé");
                 res.send(result);
                 return;
@@ -151,4 +153,53 @@ module.exports.getMusicInfo = async (req, res) => {
 };
 
 
+const downloadImage = async (imageUrl, title, artist) => {
+    const downloadPath = `../../assets/images`;
+    const imageName = `${artist} ${title}`.replace(/[^a-zA-Z0-9]/g, '_');
 
+     try {
+        const response = await fetch(imageUrl);
+        const buffer = Buffer.from(await response.arrayBuffer());
+
+        const extension = path.extname(imageUrl);
+
+        const imagePath = path.join(__dirname, downloadPath, imageName + extension)
+        
+        fs.writeFileSync(imagePath, buffer);
+        console.log("image téléchargée");
+     } catch (error) {
+        console.error('Erreur lors du téléchargement de l\'image:', error.message);
+      }
+}   
+
+
+async function fetchImage(title, artist) {
+    try {
+        const url = new URL('http://ws.audioscrobbler.com/2.0/');
+        const api_key = process.env.FM_API_KEY;
+        const params = {
+            method: 'track.getInfo',
+            artist: artist,
+            track: title,
+            api_key: api_key,
+            format: 'json',
+        }
+
+        url.search = new URLSearchParams(params).toString();
+        const response = await fetch(url.toString());
+        const data = await response.json();
+
+        if(data.track && data.track.album) {
+            const images = data.track.album.image;
+            const img = images.length > 0 ? images[images.length - 1]['#text'] : null;
+            
+            if(img) {
+                console.log(img);
+                downloadImage(img, title, artist);
+            }
+        }
+    } catch (error) {
+        console.error("Erreur:", error);
+        res.status(500).send("Une erreur s'est produite");
+    }
+}

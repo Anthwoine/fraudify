@@ -1,5 +1,6 @@
 node_modules/
 package-lock.json
-assets/images/*.jpg
-assets/music/*.mp3
+
+assets/images/*.png
+assets/music
 .env

@@ -39,8 +39,8 @@ let isMute = false;
 trackList = await getMusic();
 
 
-
-const image = "../../assets/images/default.png";
+const imagePath = "../../assets/images/";
+const defaultImage = imagePath + "default.png";
 
 
 updateVolume(volumeValue);
@@ -230,6 +230,32 @@ function buildDuration(duration) {
 }
 
 
+async function loadImage(track) {
+    const artist = track.artist;
+    const title = track.title;
+
+    const imageName = `${artist} ${title}`.replace(/[^a-zA-Z0-9]/g, '_');
+    let img = `${imagePath}/${imageName}.png`;
+
+    await fetch(img)
+            .then((response) => {
+                console.log(response.status);
+                if(!(response.status === 200)) {
+                    console.log("img not 200");
+                    img = defaultImage;
+                    console.log("img: ", img);
+                    return;
+                }
+            })
+            .catch((error) => {
+                console.log("img error");
+                img = defaultImage;
+            }
+    );
+    return img;
+}
+
+
 //charger une musique
 async function loadTrack(track) {
     try {
@@ -247,20 +273,13 @@ async function loadTrack(track) {
     currentTime.textContent = "0:00";
     totalDuration.textContent = buildDuration(track.duration);
 
-    let img = await getImage(track);
-    trackArt.style.backgroundImage = img ? `url(${img})` : `url(${image})`;
-
-
-
-
+    trackArt.style.backgroundImage =  `url(${await loadImage(track)})`;
 }
 
 //construire la playlist
 async function builPlaylist(tracklist) {
     for (let i = 0; i < tracklist.length; i++) {
         const newSong = document.createElement("div");
-        const img = await getImage(tracklist[i]);
-        console.log(img);
         newSong.className = "p-song";
         newSong.innerHTML = `
                 <div class="playlist-art"></div>
@@ -269,8 +288,8 @@ async function builPlaylist(tracklist) {
                     <p class="p-artist">${tracklist[i].artist} - ${buildDuration(trackList[i].duration)}</p>
                 </div>
                 <i id="${i}" class="bi bi-play-circle-fill playlist-play-button" style="font-size: 3rem"></i>`;
-        newSong.children[0].style.backgroundImage = img ? `url(${img})` : `url(${image})`;
-        
+
+        newSong.children[0].style.backgroundImage = `url(${await loadImage(tracklist[i])})`;
         playlist.appendChild(newSong);
     }
 }
@@ -286,31 +305,7 @@ function setVolumeIcon(volume) {
     }
 }
 
-//récupérer l'image de la musique
-async function getImage(track) {
-    const artist = track.artist;
-    const title = track.title;
 
-    const requestData = {
-        artist: artist,
-        title: title
-    }
-
-    try {
-        const response = await fetch(`/api/image`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestData),
-        });
-        const data = await response.json();
-        return data.img;
-    } catch (error) {
-        return;
-    }
-
-}
 
 
 async function getMusic() {
@@ -332,7 +327,6 @@ function updateVolume(volumeValue) {
     const value = (volumeSlider.value - volumeSlider.min) / (volumeSlider.max - volumeSlider.min) * 100;
     volumeSlider.style.background = `linear-gradient(to right, green 0%, green ${value}%, #83a9ff ${value}%, #83a9ff 100%)`;
 }
-
 
 
 

@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 
+const music = require('./controllers/music.controllers');
+
 const authentification = require('./middlewares/authentification.middleware');
 
 
@@ -35,8 +37,6 @@ app.use((req, res, next) => {
 
 
 //définition des routes
-app.use('/api/image', require('./routes/image.routes'));
-
 app.use('/api/music', require('./routes/music.routes'));
 
 app.use('/api/user', require('./routes/user.routes'));
