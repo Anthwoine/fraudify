@@ -12,41 +12,69 @@ let mySqlClient = mysql.createConnection({
 
 module.exports = mySqlClient;
 
-module.exports.addUserInDB = async (username, password, email) => {
-    return new Promise((resolve, reject) => {
-        let insertQuery = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
-        mySqlClient.query(
-            insertQuery,
-            [username, password, email],
-            function (error, result) {
-                if (error) {
-                    reject(error);
-                    return;
-                }
 
-                resolve(result);
-                return;
-            }
-        )
-    });
-};
 
-module.exports.getUserFromDBByUsername = async (username) => {
-    return new Promise((resolve, reject) => {
-        let selectQuery = "SELECT u.username, u.password FROM user as u WHERE username = ?";
-        mySqlClient.query(
-            selectQuery,
-            [username],
-            function (error, result) {
-                if (error) {
-                    console.log("error : ", error);
-                    reject(error);
-                    return;
-                }
 
-                resolve(result);
-                return;
-            }
-        )
-    });
-};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// module.exports.addUserInDB = async (username, password, email) => {
+//     return new Promise((resolve, reject) => {
+//         let insertQuery = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
+//         mySqlClient.query(
+//             insertQuery,
+//             [username, password, email],
+//             function (error, result) {
+//                 if (error) {
+//                     reject(error);
+//                     return;
+//                 }
+
+//                 resolve(result);
+//                 return;
+//             }
+//         )
+//     });
+// };
+
+// module.exports.getUserFromDBByUsername = async (username) => {
+//     return new Promise((resolve, reject) => {
+//         let selectQuery = "SELECT u.username, u.password FROM user as u WHERE username = ?";
+//         mySqlClient.query(
+//             selectQuery,
+//             [username],
+//             function (error, result) {
+//                 if (error) {
+//                     console.log("error : ", error);
+//                     reject(error);
+//                     return;
+//                 }
+
+//                 resolve(result);
+//                 return;
+//             }
+//         )
+//     });
+// };

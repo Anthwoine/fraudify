@@ -19,14 +19,15 @@ module.exports.getAllMusic = async (req, res) => {
     });
 };
 
-
 module.exports.getMusicById = async (req, res) => {
-    if (!req.params.id) {
+    const id = req.params.id;
+
+    if (!id) {
         res.status(500).send("id manquant");
         return;
     }
 
-    getDBMusicById(req.params.id).then((result) => {
+    getDBMusicById(id).then((result) => {
         if (result.length === 0) {
             res.status(500).send("aucune musique trouvée avec cet id");
             return;
@@ -42,12 +43,14 @@ module.exports.getMusicById = async (req, res) => {
 
 
 module.exports.deleteMusic = async (req, res) => {
-    if (!req.params.id) {
+    const id = req.params.id;
+
+    if (!id) {
         res.status(500).send("id manquant");
         return;
     }
 
-    deleteDBMusicById(req.params.id).then((result) => {
+    deleteDBMusicById(id).then((result) => {
         res.send(result);
         return;
     }).catch((error) => {
@@ -58,13 +61,19 @@ module.exports.deleteMusic = async (req, res) => {
 
 
 module.exports.updateMusic = async (req, res) => {
-    const params = !req.params.id || !req.body.title || !req.body.artist || !req.body.duration || !req.body.url || !req.body.filePath;
-    if (params) {
+    const id = req.params.id;
+    const title = req.body.title;
+    const artist = req.body.artist;
+    const duration = req.body.duration;
+    const url = req.body.url;
+    const filePath = req.body.filePath;
+
+    if (!id || !title || !artist || !duration || !url || !filePath) {
         res.status(500).send("pb params");
         return;
     }
 
-    updateDBMusic(req.params.id, req.body.title, req.body.artist, req.body.duration, req.body.url, req.body.filePath).then((result) => {
+    updateDBMusic(id, title, artist, duration, url, filePath).then((result) => {
         res.send(result);
         return;
     }).catch((error) => {
