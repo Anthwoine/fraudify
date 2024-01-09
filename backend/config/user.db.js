@@ -27,12 +27,12 @@ module.exports.getAllDBUser = async () => {
 
 
 
-module.exports.getDBUserByUsername = async (username) => {
+module.exports.getDBUserByEmail = async (email) => {
     return new Promise((resolve, reject) => {
-        let selectQuery = "SELECT * FROM user WHERE username = ?";
+        let selectQuery = "SELECT * FROM user WHERE email = ?";
         client.query(
             selectQuery,
-            [username],
+            [email],
             function (error, result) {
                 if (error) {
                     console.log("error : ", error);
@@ -46,7 +46,6 @@ module.exports.getDBUserByUsername = async (username) => {
         )
     });
 };
-
 
 
 module.exports.deleteDBUserById = async (id) => {

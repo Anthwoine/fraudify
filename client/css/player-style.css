@@ -42,7 +42,21 @@ body {
 
 
 
+.time-tracker {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-top: 20px;
+}
 
+.time-tracker div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    width: 50px;
+}
 
 
 .track-art {

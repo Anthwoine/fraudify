@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 
-const { getAllDBUser, getDBUserByUsername, addDBUser, updateDBUserById } = require("../config/user.db");
+const {getAllDBUser, getDBUserById, addDBUser, updateDBUserById, getDBUserByEmail} = require("../config/user.db");
 
 const saltRounds = 10;
 
@@ -21,7 +21,7 @@ module.exports.getAllUser = async (req, res) => {
 
 
 
-module.exports.getUserByUsername = async (req, res) => {
+module.exports.getUserById = async (req, res) => {
     const id = req.body.id;
 
     if (!id) {
@@ -114,15 +114,15 @@ module.exports.deleteUser = async (req, res) => {
 
 
 module.exports.login = async (req, res) => {
-    const username = req.body.username;
+    const email = req.body.email;
     const password = req.body.password;
 
-    if(!username || !password) {
+    if(!email || !password) {
         res.status(400).send('pb body params');
         return;
     }
 
-    getDBUserByUsername(username)
+    getDBUserByEmail(email)
         .then(async (result) => {
             console.log("result : ", result);
 
