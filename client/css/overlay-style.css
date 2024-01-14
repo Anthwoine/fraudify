@@ -61,12 +61,14 @@ body {
     font-weight: 600;
     color: var(--text-color);
     margin-top: 10px;
+    transition: var(--tran-05);
 }
 
 .overlay-header .overlay-music-info .overlay-artist {
     font-size: 1rem;
     color: var(--text-color);
     margin-top: 5px;
+    transition: var(--tran-05);
 }
 
 .music-overlay .playlist-container {
@@ -82,15 +84,16 @@ body {
 }
 
 .playlist-container .playlist {
-    background: var(--thumbnail-color);
+    background: var(--sidebar-color);
     width: 95%;
-    height: 98%;
+    height: 90%;
     margin-top: 2%;
     border-radius: 5px 5px 0 0;
     display: flex;
     align-items: center;
     flex-direction: column;
     padding-top: 10px;
+    transition: var(--tran-05);
 }
 
 .playlist-container::-webkit-scrollbar {
@@ -107,6 +110,7 @@ body {
     border-radius: 5px;
     background: var(--sidebar-color);
     cursor: pointer;
+    transition: var(--tran-05);
 }
 
 .playlist-container .playlist .playlist-music:not(:first-child) {
@@ -117,6 +121,7 @@ body {
     display: flex;
     align-items: center;
     flex-direction: row;
+    transition: var(--tran-05);
 }
 
 .playlist .playlist-music .playlist-music-details .playlist-music-thumbnail {
@@ -144,6 +149,7 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    transition: var(--tran-05);
 }
 
 .playlist .playlist-music .playlist-music-details .playlist-music-info .playlist-music-artist {
@@ -154,6 +160,7 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    transition: var(--tran-05);
 }
 
 .playlist-music-controls {
@@ -161,6 +168,7 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: row;   
+    
 }
 
 .playlist-music-controls .icon {
@@ -168,6 +176,11 @@ body {
     color: var(--text-color);
     margin: 0 5px;
     cursor: pointer;
+    transition: var(--tran-05);
+}
+
+.playlist-music:hover {
+    background: var(--thumbnail-color);
 }
 
 .playlist-music-controls .icon:hover {

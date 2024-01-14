@@ -32,18 +32,8 @@ let isMute = false;
 const imagePath = "../../../assets/images/";
 const defaultImage = imagePath + "default.png";
 
-let audioList = [
-    {
-        title: 'Zombie',
-        artist: 'Braden Ross',
-        duration: '156',
-    },
-    {
-        title: 'Teardrops',
-        artist: 'Bring Me The Horizon',
-        duration: '215',
-    }
-];
+let audioList = await getMusic();
+
 
 if(!audioList || audioList.length === 0) {
     console.log('no music');
@@ -310,4 +300,14 @@ function audioPause() {
     currentAudio.pause();
     isPlaying = false;
     playPause.textContent = 'play_circle';
+}
+
+async function getMusic() {
+    try {
+        const response = await fetch(`/api/music`);
+        const music = await response.json();
+        return music;
+    } catch (error) {
+        return;
+    }
 }

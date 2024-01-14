@@ -49,14 +49,14 @@ body {
 }
 
 body.dark {
-    --body-color: #18191a;
+    --body-color: #000000;
     --sidebar-color: #242526;
     --primary-color: #3a3b3c;
     --primary-color-light: #3a3b3c;
     --toggle-color: #fff;
     --text-color: #ccc;
     --logo-color: #ccc;
-    --thumbnail-color: #18191a;
+    --thumbnail-color: #000000;
     --icon-hover-color: white;
 }
 
@@ -325,4 +325,31 @@ body.dark .switch::before {
 .sidebar.close .moon-sun {
     opacity: 0;
 }
+
+
+.main-container {
+    background: red;  
+    position: relative;
+    display: flex;
+    height: calc(100% - 115px);
+    width: calc(100% - 90px);
+    left: 90px;
+    top: calc(-100%);
+    transition: var(--tran-05);
+}
+
+.sidebar:not(.close) ~ .main-container {
+    width: calc(100% - 250px);
+    left: 250px;
+}
+
+.music-overlay:not(.close) ~ .main-container {
+    width: calc(100% - 90px - 400px);
+}
+
+.sidebar:not(.close) ~ .music-overlay:not(.close) ~ .main-container {
+    width: calc(100% - 250px - 400px);
+}
+
+
 
