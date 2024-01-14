@@ -33,6 +33,7 @@
     --logo-color: black;
     --thumbnail-color: #e4e9f7;
     --icon-hover-color: black;
+    --active-icon-color: #2c5ebb;
 
     /* Transition */
     --tran-02: all 0.2s ease;
@@ -324,5 +325,4 @@ body.dark .switch::before {
 .sidebar.close .moon-sun {
     opacity: 0;
 }
-
 

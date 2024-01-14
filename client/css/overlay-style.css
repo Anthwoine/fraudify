@@ -44,6 +44,8 @@ body {
     height: 305px;
     border-radius: 5px;
     background: var(--thumbnail-color);
+    background-size: cover;
+    background-position: center;
 }
 
 .overlay-header .overlay-music-info {
@@ -75,6 +77,8 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 .playlist-container .playlist {
@@ -84,18 +88,29 @@ body {
     margin-top: 2%;
     border-radius: 5px 5px 0 0;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     padding-top: 10px;
 }
+
+.playlist-container::-webkit-scrollbar {
+    display: none;
+}
+
 
 .playlist-container .playlist .playlist-music {
     display: flex;
     align-items: center;
-    flex-direction: row;
+    justify-content: space-between;
     width: 95%;
     height: 100px;
     border-radius: 5px;
     background: var(--sidebar-color);
+    cursor: pointer;
+}
+
+.playlist-container .playlist .playlist-music:not(:first-child) {
+    margin-top: 10px;
 }
 
 .playlist .playlist-music .playlist-music-details {
@@ -110,6 +125,8 @@ body {
     border-radius: 5px;
     background: var(--thumbnail-color);
     margin: 10px;
+    background-size: cover;
+    background-position: center;
 }
 
 .playlist .playlist-music .playlist-music-details .playlist-music-info {
@@ -123,20 +140,27 @@ body {
     font-weight: 600;
     color: var(--text-color);
     margin-top: 10px;
+    max-width: 125px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .playlist .playlist-music .playlist-music-details .playlist-music-info .playlist-music-artist {
     font-size: 1rem;
     color: var(--text-color);
     margin-top: 5px;
+    max-width: 125px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .playlist-music-controls {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: row;
-    margin-left: 100px;    
+    flex-direction: row;   
 }
 
 .playlist-music-controls .icon {

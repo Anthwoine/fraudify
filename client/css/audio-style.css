@@ -16,6 +16,8 @@
 }
 
 
+
+
 .player {
     position: relative;
     display: flex;
@@ -108,7 +110,7 @@
     margin-left: 10px;
 }
 
-.player .controls .icon.play {
+.player .controls .icon.play-pause {
     font-size: 3.5rem;
 }
 
@@ -167,3 +169,6 @@
     margin-left: 5px;
 }
 
+.player .controls .icon.active {
+    color: var(--active-icon-color);
+}
