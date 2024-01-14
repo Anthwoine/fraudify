@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,200&display=swap');
+
+* {
+    font-family: 'poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.material-symbols-outlined {
+    font-family: 'Material Icons';
+}
+
+.material-symbols-outlined.control {
+    font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 200, 'opsz' 48;
+}
+
+
+.player {
+    position: relative;
+    display: flex;
+    align-items: center;
+    top: calc(100vh - 115px);
+    height: 115px;
+    width: 100%; 
+    flex-direction: row;
+    background: var(--sidebar-color);
+    transition: var(--tran-05);
+    z-index: 100;
+}
+
+.player .details {
+    display: flex;
+    align-items: center;
+}
+
+.player .controls {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.player .options {
+    position: absolute;
+    display: flex;
+    text-align: center;
+    left: 100%;
+    transform: translateX(-100%);
+    justify-content: center;
+    padding-right: 20px;
+
+}
+
+.details .thumbnail {
+    height: 80px;
+    width: 80px;
+    margin: 10px;
+    border-radius: 5px;
+    background: var(--thumbnail-color);
+    transition: var(--tran-05);
+    background-size: cover;
+    background-position: center;
+}
+
+.details .music-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.details .music-info span {
+    color: var(--text-color);
+}
+
+.details .music-info .title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.details .music-info .artist {
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+
+.player .controls .icon,
+.player .options .icon,
+.player .details .icon {
+    font-size: 2rem;
+    color: var(--text-color);
+    transition: var(--tran-05);
+    cursor: pointer;
+}
+
+.player .controls .icon:hover,
+.player .options .icon:hover,
+.player .details .icon:hover {
+    color: var(--icon-hover-color);
+}
+
+.player .details .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+}
+
+.player .controls .icon.play {
+    font-size: 3.5rem;
+}
+
+.player .controls .icon.previous,
+.player .controls .icon.next {
+    font-size: 3rem;
+}
+
+.player .controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 10px;
+}
+
+.player .controls .buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+.player .controls .buttons span {
+    margin: 0 10px;
+}
+
+
+
+.player .controls .time-tracker {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.player .controls .time-tracker .track-slider {
+    width: 600px;
+    margin: 0 10px;
+}
+
+.time-tracker span {
+    width: 40px;
+    text-align: center;
+    color: var(--text-color);
+}
+
+.options div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+}
+
+.options .volume-tracker .volume-slider {
+    margin-left: 5px;
+}
+

@@ -5,15 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/sidebar-style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="../css/audio-style.css">
+    <link rel="stylesheet" href="../css/overlay-style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <title>Fraudify</title>
 </head>
 
 <body>
-    <nav class="sidebar">
+    <nav class="sidebar close">
         <header>
             <div class="image-text">
                 <span class="image">
-                    <span class="material-symbols-outlined album">album</span>
+                    <span class="material-symbols-outlined album icon">album</span>
                 </span>
 
                 <div class="text header-text">
@@ -90,7 +93,80 @@
         </div>
     </nav>
 
-    <script src="../js/sidebar-script.js"></script>
+    <div class="player">
+        <div class="details">
+            <div class="thumbnail"></div>
+            <div class="music-info">
+                <span class="title">Title</span>
+                <span class="artist">Artiste</span>
+            </div>
+
+            <span class="material-symbols-outlined icon">favorite</span>
+        </div>
+
+        <div class="controls">
+            <div class="buttons">
+                <span class="material-symbols-outlined icon control">shuffle</span>
+                <span class="material-symbols-outlined icon control previous">skip_previous</span>
+                <span class="material-symbols-outlined icon control play">play_circle</span>
+                <span class="material-symbols-outlined icon control next">skip_next</span>
+                <span class="material-symbols-outlined icon control">repeat</span>
+            </div>
+
+            <div class="time-tracker">
+                <span class="current-time">0:00</span>
+                <input type="range" min="0" value="0" class="track-slider">
+                <span class="total-duration">0:00</span>
+            </div>
+        </div>
+
+        <div class="options">
+            <div>
+                <span class="material-symbols-outlined icon option overlay-button">genres</span>       
+            </div>
+            
+
+            <div class="volume-tracker">
+                <span class="material-symbols-outlined icon">volume_up</span>
+                <input type="range" min="0" max="1.0" step="0.01" class="volume-slider">
+            </div>
+        </div>
+    </div>
+
+    <div class="music-overlay close">
+        <span class="material-symbols-outlined close-overlay">close</span>
+        <div class="overlay-header">
+            <div class="overlay-thumbnail"></div>
+            <div class="overlay-music-info">
+                <span class="overlay-title">Title</span>
+                <span class="overlay-artist">Artiste</span>
+            </div>
+        </div>
+
+        <div class="playlist-container">
+            <div class="playlist">
+                <div class="playlist-music">
+                    <div class="playlist-music-details">
+                        <div class="playlist-music-thumbnail"></div>
+                        <div class="playlist-music-info">
+                            <span class="playlist-music-title">Title</span>
+                            <span class="playlist-music-artist">Artiste</span>
+                        </div>
+
+                        <div class="playlist-music-controls">
+                            <span class="material-symbols-outlined icon control">more_horiz</span>
+                            <span class="material-symbols-outlined icon control play">play_circle</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
+
+<script src="../js/sidebar-script.js"></script>
+<script src="../js/audio-script.js"></script>
+<script src="../js/overlay-script.js"></script>
 
 </html>

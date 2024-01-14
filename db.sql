@@ -1,4 +1,4 @@
--- Active: 1701782970574@@127.0.0.1@3306@audioplayer_db
+-- Active: 1705231715283@@127.0.0.1@3306@fraudify_db
 
 DROP TABLE if EXISTS user;
 CREATE TABLE user (

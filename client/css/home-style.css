@@ -1,0 +1,13 @@
+.sidebar-container {
+    position: flex;
+    height: 100vh;
+    width: max-content;
+    z-index: 100;
+}
+
+.sidebar-container object{
+    display: absolute;
+    width: 100%;
+    height: 100%;
+}
+
