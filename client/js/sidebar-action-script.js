@@ -7,6 +7,18 @@ const loadAction = async () => {
 
             const container = document.querySelector('.main-container');
             container.innerHTML = await loadPage(target.getAttribute('page'));
+
+            const existingScript = document.querySelector('.action-script');
+            if (existingScript) {
+                existingScript.remove();
+            }
+
+            const script = document.createElement('script');
+            script.src = `js/${target.getAttribute('page')}-script.js`;
+            script.classList.add('action-script');
+            script.defer = true;
+
+            document.head.appendChild(script);
         });
     });
 }
@@ -21,7 +33,10 @@ async function loadPage(page) {
         console.error('error');
         return '';
     }
-;
 }
 
-await loadAction();
+loadAction();
+
+document.querySelectorAll('script').forEach((element) => {
+    console.log(element.src);
+});

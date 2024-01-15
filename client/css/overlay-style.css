@@ -80,11 +80,10 @@ body {
     justify-content: center;
     flex-direction: column;
     overflow-x: hidden;
-    overflow-y: scroll;
 }
 
 .playlist-container .playlist {
-    background: var(--sidebar-color);
+    background: var(--thumbnail-color);
     width: 95%;
     height: 90%;
     margin-top: 2%;
@@ -94,9 +93,11 @@ body {
     flex-direction: column;
     padding-top: 10px;
     transition: var(--tran-05);
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
-.playlist-container::-webkit-scrollbar {
+.playlist::-webkit-scrollbar {
     display: none;
 }
 
