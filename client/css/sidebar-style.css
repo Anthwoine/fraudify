@@ -196,7 +196,10 @@ body.dark .sidebar.close .toggle {
     align-items: center;
     text-decoration: none;
     border-radius: 6px;
+    cursor: pointer;
 }
+
+
 
 .sidebar .search-box {
     background: var(--primary-color-light);
