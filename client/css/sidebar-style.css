@@ -189,7 +189,7 @@ body.dark .sidebar.close .toggle {
     transform: translateY(-50%);
 }
 
-.sidebar li a {
+.sidebar li .action {
     height: 100%;
     width: 100%;
     display: flex;
@@ -198,6 +198,7 @@ body.dark .sidebar.close .toggle {
     border-radius: 6px;
     cursor: pointer;
 }
+
 
 
 
@@ -224,19 +225,25 @@ body.dark .sidebar.close .toggle {
     transition: var(--tran-05);
 }
 
-.sidebar li a:hover {
+.sidebar li .action:hover {
     background: var(--primary-color);
 }
 
-.sidebar li a:hover .icon,
-.sidebar li a:hover .text {
+.sidebar li .action:hover .icon,
+.sidebar li .action:hover .text {
     color: var(--sidebar-color);
 }
 
-body.dark .sidebar li a:hover .icon,
-body.dark .sidebar li a:hover .text {
+body.dark .sidebar li .action:hover .icon,
+body.dark .sidebar li .action:hover .text {
     color: var(--text-color);
 }
+
+.sidebar li .action.active .icon,
+.sidebar li .action.active .text {
+    color: var(--active-icon-color);
+}
+
 
 .sidebar .menu-bar {
     height: calc(100% - 70px);

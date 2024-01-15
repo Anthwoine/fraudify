@@ -5,6 +5,12 @@ const loadAction = async () => {
             target = target.tagName === 'SPAN' ? target.parentNode : target;
             console.log(target.getAttribute('page'));
 
+            document.querySelectorAll('.action').forEach((button) => {
+                button.classList.remove('active');
+            });
+
+            target.classList.add('active');
+
             const container = document.querySelector('.main-container');
             container.innerHTML = await loadPage(target.getAttribute('page'));
 
@@ -23,6 +29,18 @@ const loadAction = async () => {
     });
 }
 
+loadHome();
+loadAction();
+
+
+
+
+
+
+
+
+
+
 
 async function loadPage(page) {
     try {
@@ -35,8 +53,13 @@ async function loadPage(page) {
     }
 }
 
-loadAction();
+async function loadHome() {
+    const container = document.querySelector('.main-container');
+    container.innerHTML = await loadPage('home');
+    const script = document.createElement('script');
+    script.src = 'js/home-script.js';
+    script.defer = true;
+    document.head.appendChild(script);
 
-document.querySelectorAll('script').forEach((element) => {
-    console.log(element.src);
-});
+    document.querySelector('.home').classList.add('active');
+}   

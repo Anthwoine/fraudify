@@ -33,7 +33,9 @@ const imagePath = "../../../assets/images/";
 const defaultImage = imagePath + "default.png";
 
 let audioList = await getMusic();
+const trueAudioList = Array.from(audioList);
 
+console.log(trueAudioList);
 
 if(!audioList || audioList.length === 0) {
     console.log('no music');
@@ -70,12 +72,32 @@ previous.addEventListener('click', () => {
 });
 
 next.addEventListener('click', () => {
-    nextAudio();
+    if(isRepeat) {
+        currentAudio.currentTime = 0;
+        currentAudio.play();
+    } else {
+        nextAudio();
+    }
 });
 
-shuffle.addEventListener('click', () => {
+shuffle.addEventListener('click', async () => {
     isRandom = !isRandom;
     shuffle.classList.toggle('active', isRandom);
+
+    if (isRandom) {
+        // Si c'est en mode aléatoire, mélanger la liste et mettre à jour l'index
+        const shuffledList = [...audioList].sort(() => Math.random() - 0.5);
+        audioIndex = shuffledList.indexOf(audioList[audioIndex]);
+        audioList = shuffledList;
+    } else {
+        // Si ce n'est pas en mode aléatoire, restaurer la liste originale et mettre à jour l'index
+        audioIndex = audioList.indexOf(trueAudioList[audioIndex]);
+        audioList = [...trueAudioList];
+        
+    }
+
+    // Charger la playlist mise à jour
+    await loadPlaylist(audioList);
 });
 
 repeat.addEventListener('click', () => {
@@ -136,9 +158,7 @@ async function loadAudio(audio) {
     try {
         currentAudio.src = `../../../assets/music/${audio.title}.mp3`;
         currentAudio.load();
-    } catch (error) {
-        console.log(error);
-    }
+    } catch (error) {}
 
     title.textContent = audio.title;
     artist.textContent = audio.artist;
@@ -237,16 +257,12 @@ async function loadImage(track) {
 
     await fetch(img)
             .then((response) => {
-                console.log(response.status);
                 if(!(response.status === 200)) {
-                    console.log("img not 200");
                     img = defaultImage;
-                    console.log("img: ", img);
                     return;
                 }
             })
             .catch((error) => {
-                console.log("img error");
                 img = defaultImage;
             }
     );
@@ -255,13 +271,9 @@ async function loadImage(track) {
 
 
 function nextAudio() {
-    if(isRandom) {
-        audioIndex = Math.floor(Math.random() * audioList.length);
-    } else {
-        audioIndex++;
-        if(audioIndex >= audioList.length) {
-            audioIndex = 0;
-        }
+    audioIndex++;
+    if(audioIndex >= audioList.length) {
+        audioIndex = 0;
     }
 
     loadAudio(audioList[audioIndex]);
@@ -282,12 +294,6 @@ function previousAudio() {
     loadAudio(audioList[audioIndex]);
     isPlaying ? currentAudio.play() : currentAudio.pause();
 }
-
-document.querySelectorAll('.playlist-music').forEach((music) => {
-    music.addEventListener('click', () => {
-        console.log('click');
-    });
-});
 
 
 function audioPlay() {

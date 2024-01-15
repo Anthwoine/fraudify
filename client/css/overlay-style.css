@@ -85,9 +85,10 @@ body {
 .playlist-container .playlist {
     background: var(--thumbnail-color);
     width: 95%;
-    height: 90%;
-    margin-top: 2%;
-    border-radius: 5px 5px 0 0;
+    height: 100%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    border-radius: 5px;
     display: flex;
     align-items: center;
     flex-direction: column;
