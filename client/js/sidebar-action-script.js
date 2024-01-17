@@ -61,5 +61,5 @@ async function loadHome() {
     script.defer = true;
     document.head.appendChild(script);
 
-    document.querySelector('.home').classList.add('active');
+    document.querySelector('[page="home"]').classList.add('active');
 }   
