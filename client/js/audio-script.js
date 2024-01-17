@@ -35,7 +35,7 @@ const defaultImage = imagePath + "default.png";
 let audioList = await getMusic();
 const trueAudioList = Array.from(audioList);
 
-console.log(trueAudioList);
+console.log("trueAudioList : ",trueAudioList);
 
 if(!audioList || audioList.length === 0) {
     console.log('no music');
@@ -48,6 +48,7 @@ if(!audioList || audioList.length === 0) {
 
 overlayBtn.addEventListener('click', () => {
     overlay.classList.toggle('close');
+    overlayBtn.classList.toggle('active');
 });
 
 
@@ -85,20 +86,17 @@ shuffle.addEventListener('click', async () => {
     shuffle.classList.toggle('active', isRandom);
 
     if (isRandom) {
-        // Si c'est en mode aléatoire, mélanger la liste et mettre à jour l'index
-        const shuffledList = [...audioList].sort(() => Math.random() - 0.5);
+        const shuffledList = shuffleArray([...trueAudioList]);
         audioIndex = shuffledList.indexOf(audioList[audioIndex]);
         audioList = shuffledList;
     } else {
-        // Si ce n'est pas en mode aléatoire, restaurer la liste originale et mettre à jour l'index
-        audioIndex = audioList.indexOf(trueAudioList[audioIndex]);
-        audioList = [...trueAudioList];
-        
+        audioIndex = trueAudioList.indexOf(audioList[audioIndex]);
+        audioList = trueAudioList.slice();
     }
 
-    // Charger la playlist mise à jour
-    await loadPlaylist(audioList);
+    await loadOverlay(audioList[audioIndex]);
 });
+
 
 repeat.addEventListener('click', () => {
     isRepeat = !isRepeat;
@@ -120,7 +118,6 @@ currentAudio.addEventListener('ended', () => {
         nextAudio();
     }
 });
-
 
 
 
@@ -152,8 +149,6 @@ volumeIcon.addEventListener('click', () => {
 
 
 
-
-
 async function loadAudio(audio) {
     try {
         currentAudio.src = `../../../assets/music/${audio.title}.mp3`;
@@ -167,7 +162,6 @@ async function loadAudio(audio) {
     audioSlider.setAttribute('max', audio.duration);
     currentTime.textContent = '0:00';
     duration.textContent = buildDuration(audio.duration);
-
     await loadOverlay(audio);
 }
 
@@ -180,14 +174,26 @@ async function loadOverlay(audio) {
     overlayArtist.textContent = audio.artist;
     overlayThumbnail.style.backgroundImage = `url(${ await loadImage(audio)})`;
 
-    const list = audioList.filter((item, index) => index > audioIndex);
+    console.log("audioList: ", audioList);
+    console.log("audioIndex: ", audioIndex);
+    console.log('music', audioList[audioIndex]);
+
+
+    const list = audioList.slice();
+    const currentIndex = audioIndex;
+    
+    const currentAudio = list.splice(currentIndex, 1)[0];
+    const beforeAudio = list.splice(0, currentIndex);
+    list.unshift(currentAudio);    
+    list.push(...beforeAudio);
+
     await loadPlaylist(list);
 }
 
 async function loadPlaylist(audioList) {
     const playlist = document.querySelector('.playlist');
     playlist.innerHTML = '';
-    for(let i=0; i<audioList.length; i++) {
+    for(let i=1; i<audioList.length; i++) {
         const music = document.createElement('div');
         music.classList.add('playlist-music');
 
@@ -206,9 +212,10 @@ async function loadPlaylist(audioList) {
             </div>
         `;
 
-        music.querySelector('.playlist-music-controls .play').addEventListener('click', () => {
-            audioIndex = audioIndex + 1 + i;
-            loadAudio(audioList[i]);
+        music.querySelector('.playlist-music-controls .play').addEventListener('click', async () => {
+            audioIndex = audioIndex + i;
+            console.log('audioIndex: ', audioIndex);
+            await loadAudio(audioList[i]);
             audioPlay();
         });
 
@@ -316,4 +323,17 @@ async function getMusic() {
     } catch (error) {
         return;
     }
+}
+
+function shuffleArray(array) {
+    const audio = array[audioIndex];
+    const shuffledArray = array.filter((item) => item !== audio);
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+    }
+
+    shuffledArray.unshift(audio);
+    console.log("array: ", shuffledArray);
+    return shuffledArray;
 }

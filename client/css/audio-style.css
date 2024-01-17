@@ -169,6 +169,7 @@
     margin-left: 5px;
 }
 
-.player .controls .icon.active {
+.player .controls .icon.active,
+.player .options .icon.active {
     color: var(--active-icon-color);
 }
