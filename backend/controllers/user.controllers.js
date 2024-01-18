@@ -109,7 +109,7 @@ module.exports.deleteUser = async (req, res) => {
 
 
 module.exports.login = async (req, res) => {
-    const email = req.body.email;
+    const username = req.body.username;
     const password = req.body.password;
 
     if(!email || !password) {
@@ -117,7 +117,7 @@ module.exports.login = async (req, res) => {
         return;
     }
 
-    User.findOne({ where: { email: email } })
+    User.findOne({ where: { username: username } })
         .then(async (user) => {
             if(!user) {
                 res.status(404).send("aucun utilisateur trouvé avec cet email");
