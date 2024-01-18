@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 
-const {getAllDBUser, getDBUserById, addDBUser, updateDBUserById, getDBUserByEmail} = require("../config/user.db");
+const User = require('../models/user.models');
 
 const saltRounds = 10;
 
@@ -10,13 +10,9 @@ const saltRounds = 10;
 
 
 module.exports.getAllUser = async (req, res) => {
-    getAllDBUser().then((result) => {
-        res.send(result);
-        return;
-    }).catch((error) => {
-        res.status(500).send("erreur lors de la récupération de l'utilisateur : " + error.code);
-        return;
-    });
+    User.findAll()
+        .then(user => res.status(200).json(user))
+        .catch(error => res.status(500).json(error));
 };
 
 
@@ -29,13 +25,18 @@ module.exports.getUserById = async (req, res) => {
         return;
     }
 
-    getDBUserById(id).then((result) => {
-        res.send(result);
-        return;
-    }).catch((error) => {
-        res.status(500).send("erreur lors de la récupération de l'utilisateur (id): " + error.code);
-        return;
-    });
+    User.findByPk(id)
+        .then((user) => {
+            if (!user) {
+                res.status(404).send("aucun utilisateur trouvé avec cet id");
+                return;
+            }
+
+            res.status(200).json(user);
+        })
+        .catch((error) => {
+            res.status(500).send("erreur lors de la récupération de l'utilisateur (id): " + error);
+        });
 };
 
 
@@ -43,7 +44,7 @@ module.exports.getUserById = async (req, res) => {
 module.exports.addUser = async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
-    const email = req.body.email;
+
 
     if(!username || !password || !email) {
         res.status(400).send('pb body params');
@@ -53,22 +54,14 @@ module.exports.addUser = async (req, res) => {
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(password, salt);
 
-    addDBUser(username, hash, email)
-        .then((result) => {
-            console.log("result: ", result);
-            res.status(200).send("utilisateur ajouté");
-            return;
-        })
-        .catch((error) => {
-            if(error.code === "ER_DUP_ENTRY") {
-                res.status(500).send("l'utilisateur existe déjà");
-                return;
-            }
-            
-            res.status(500).send("erreur lors de l'ajout de l'utilisateur : " + error.code);
-            return;
-        }
-    );
+    const user = User.build({
+        username: username,
+        password: hash,
+    });
+
+    user.save()
+        .then(() => res.status(200).send("utilisateur ajouté"))
+        .catch((error) => res.status(500).send("erreur lors de l'ajout de l'utilisateur : " + error));
 };
 
 
@@ -87,28 +80,30 @@ module.exports.updateUser = async (req, res) => {
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(password, salt);
 
-    updateDBUserById(id, username, hash, email)
-        .then((result) => {
-            console.log("result: ", result);
-            res.status(200).send("utilisateur ajouté");
-            return;
-        })
-        .catch((error) => {
-            if(error.code === "ER_DUP_ENTRY") {
-                res.status(500).send("l'utilisateur existe déjà");
-                return;
-            }
-            
-            res.status(500).send("erreur lors de l'ajout de l'utilisateur : " + error.code);
-            return;
-        }
-    );
+    const user = User.build({
+        id: id,
+        username: username,
+        password: hash,
+    });
+
+    User.save(user.dataValues, { where: { id: id } })
+        .then(() => res.status(200).send("utilisateur modifié"))
+        .catch((error) => res.status(500).send("erreur lors de la modification de l'utilisateur : " + error));
 };
 
 
 
 module.exports.deleteUser = async (req, res) => {
-    res.send('TODO deleteUser');
+    const id = req.params.id;
+
+    if (!id) {
+        res.status(500).send("id manquant");
+        return;
+    }
+
+    User.destroy({ where: { id: id } })
+        .then(() => res.status(200).send("utilisateur supprimé"))
+        .catch((error) => res.status(500).send("erreur lors de la suppression de l'utilisateur (id): " + error));
 };
 
 
@@ -122,19 +117,13 @@ module.exports.login = async (req, res) => {
         return;
     }
 
-    getDBUserByEmail(email)
-        .then(async (result) => {
-            console.log("result : ", result);
-
-            if(result.length === 0) {
-                console.log("utilisateur non trouvé");
-                res.status(500).send({message: "utilisateur non trouvé"});
+    User.findOne({ where: { email: email } })
+        .then(async (user) => {
+            if(!user) {
+                res.status(404).send("aucun utilisateur trouvé avec cet email");
                 return;
             }
-            
-            console.log("result[0] : ", result[0])
 
-            const user = result[0];
             if(await validatePassword(password, user.password)) {
                 const token = getJWT(user);
                 res.status(200).send({access_token : token});
@@ -143,8 +132,8 @@ module.exports.login = async (req, res) => {
                 res.status(500).send("mdp incorrect");
                 return;
             }
-
-        }).catch((error) => {
+        })
+        .catch((error) => {
             res.status(500).send("erreur lors de la connexion de l'utilisateur : " + error);
         });
 };

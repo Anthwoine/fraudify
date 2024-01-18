@@ -1,16 +1,34 @@
 require('dotenv').config();
-let mysql = require('mysql');
+const { Sequelize } = require('sequelize');
 
 
-// local mysql db connection
-let mySqlClient = mysql.createConnection({
-    host: process.env.SQL_HOST,
-    user: process.env.SQL_USER,
-    password: process.env.SQL_PASSWORD,
-    database: process.env.SQL_DATABASE
+dbConfig = {
+    HOST: process.env.SQL_HOST,
+    USER: process.env.SQL_USER,
+    PASSWORD: process.env.SQL_PASSWORD,
+    DB: process.env.SQL_DATABASE,
+    dialect: "mysql" || "mariadb",
+};
+
+module.exports = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
+    host: dbConfig.HOST,
+    dialect: dbConfig.dialect,
+    define: {
+        timestamps: true,
+        createdAt: false,
+        updatedAt: false,
+    }
 });
 
-module.exports = mySqlClient;
+// local mysql db connection
+// let mySqlClient = mysql.createConnection({
+//     host: process.env.SQL_HOST,
+//     user: process.env.SQL_USER,
+//     password: process.env.SQL_PASSWORD,
+//     database: process.env.SQL_DATABASE
+// });
+
+// module.exports = mySqlClient;
 
 
 

@@ -1,24 +1,14 @@
-const { getAllDBMusic, getDBMusicById, deleteDBMusicById, addDBMusic, updateDBMusicById, updateDBMusic } = require('../config/music.db');
 const ytdl = require('ytdl-core');
 const fs = require('fs');
 const path = require('path');
-
+const Music = require('../models/music.models');
 
 
 
 module.exports.getAllMusic = async (req, res) => {
-    getAllDBMusic().then((result) => {
-        if (result.length === 0) {
-            res.status(500).send("aucune musique trouvée");
-            return;
-        }
-
-        res.send(result);
-        return;
-    }).catch((error) => {
-        res.status(500).send("erreur lors de la récupération de la musique : " + error.code);
-        return;
-    });
+    Music.findAll()
+        .then(music => res.status(200).json(music))
+        .catch(error => res.status(500).json(error));
 };
 
 module.exports.getMusicById = async (req, res) => {
@@ -29,18 +19,18 @@ module.exports.getMusicById = async (req, res) => {
         return;
     }
 
-    getDBMusicById(id).then((result) => {
-        if (result.length === 0) {
-            res.status(500).send("aucune musique trouvée avec cet id");
-            return;
-        }
+    Music.findByPk(id)
+        .then((music) => {
+            if (!music) {
+                res.status(404).send("aucune musique trouvée avec cet id");
+                return;
+            }
 
-        res.send(result);
-        return;
-    }).catch((error) => {
-        res.status(500).send("erreur lors de la récupération de la musique (id): " + error.code);
-        return;
-    });
+            res.status(200).json(music);
+        })
+        .catch((error) => {
+            res.status(500).send("erreur lors de la récupération de la musique (id): " + error);
+        });  
 };
 
 
@@ -52,13 +42,9 @@ module.exports.deleteMusic = async (req, res) => {
         return;
     }
 
-    deleteDBMusicById(id).then((result) => {
-        res.send(result);
-        return;
-    }).catch((error) => {
-        res.status(500).send("erreur lors de la suppression de la musique : " + error.code);
-        return;
-    });
+    Music.destroy({ where: { id: id } })
+        .then(() => res.status(200).send("musique supprimée"))
+        .catch((error) => res.status(500).send("erreur lors de la suppression de la musique (id): " + error));
 };
 
 
@@ -75,20 +61,24 @@ module.exports.updateMusic = async (req, res) => {
         return;
     }
 
-    updateDBMusic(id, title, artist, duration, url, filePath).then((result) => {
-        res.send(result);
-        return;
-    }).catch((error) => {
-        res.status(500).send("erreur lors de la mise à jour de la musique : " + error.code);
-        return;
+    const music = Music.build({
+        id: id,
+        title: title,
+        artist: artist,
+        duration: duration,
+        url: url,
+        path: filePath
     });
+
+    Music.update(music.dataValues, { where: { id: id } })
+        .then(() => res.status(200).send("musique modifiée"))
+        .catch((error) => res.status(500).send("erreur lors de la modification de la musique (id): " + error));
 };
 
 module.exports.downloadMusic = async (req, res) => {
     const url = req.body.url;
     const title = req.body.title;
     const artist = req.body.artist;
-
     const filePath = `assets/music/${title}.mp3`;
     
     const videoInfo = await ytdl.getInfo(url);
@@ -99,7 +89,15 @@ module.exports.downloadMusic = async (req, res) => {
         return;
     }
 
-    addDBMusic(title, artist, duration, url, filePath)
+    const music = Music.build({
+        title: title,
+        artist: artist,
+        duration: duration,
+        url: url,
+        path: filePath
+    });
+
+    music.save()
         .then((result) => {
             console.log("musique ajoutée à la base de données");
             const video = ytdl(url, { quality: 'highestaudio' });
