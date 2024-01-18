@@ -136,12 +136,13 @@ module.exports.getMusicInfo = async (req, res) => {
         const duration = videoInfo.player_response.videoDetails.lengthSeconds;
         const title = videoInfo.player_response.videoDetails.title;
         const author = videoInfo.player_response.videoDetails.author;
-        const image = videoInfo.player_response.videoDetails.thumbnail.thumbnails[0].url;
+
         
+        const image = await fetchImage(title, author, false);        
         const response = {
             title: title,
             artist: author,
-            duration: duration + " secondes",
+            duration: duration,
             image: image
         }
         res.json(response);
@@ -152,6 +153,25 @@ module.exports.getMusicInfo = async (req, res) => {
     });
 };
 
+module.exports.getMusicImg = async (req, res) => {
+    const title = req.params.title;
+    const artist = req.params.artist;
+
+    if(!title || !artist) {
+        res.status(500).send("paramètres manquants");
+        return;
+    }
+
+    const img = await fetchImage(title, artist, false);
+    console.log("img: (getMusicImg)", img);
+    if(!img) {
+        res.status(500).send("image non trouvée");
+        return;
+    }
+
+    res.json({ image: img });
+    return;
+};
 
 const downloadImage = async (imageUrl, title, artist) => {
     const downloadPath = `../../assets/images`;
@@ -173,6 +193,8 @@ const downloadImage = async (imageUrl, title, artist) => {
 }   
 
 
+
+
 async function fetchImage(title, artist, download) {
     try {
         const url = new URL('http://ws.audioscrobbler.com/2.0/');
@@ -189,22 +211,26 @@ async function fetchImage(title, artist, download) {
         const response = await fetch(url.toString());
         const data = await response.json();
 
+        console.log("data: ", data);
+
         if(data.track && data.track.album) {
             const images = data.track.album.image;
             const img = images.length > 0 ? images[images.length - 1]['#text'] : null;
             
             if(img && download) {
-                console.log("image trouvée dowload...");
+                console.log("image trouvée download...");
                 console.log(img);
                 downloadImage(img, title, artist);
             } else if(img){
                 console.log("image trouvée");
+                console.log(img);
                 return img;
             } else {
                 console.log("image non trouvée");
                 return null;
             }
         } else {
+            console.log("image non trouvée");
             return null;
         }
     } catch (error) {

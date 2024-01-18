@@ -1,4 +1,4 @@
-.sidebar-container {
+.fraudify-download {
     width: 100%;
     height: 100%;
     display: flex;
@@ -7,12 +7,193 @@
     transition: var(--tran-05);
 }
 
-.sidebar-download {
+.download-container {
+    display: flex;
+    justify-content: center;
     width: 100%;
     height: 98%;
     margin: 10px;
-    display: flex;
     border-radius: 5px;
     background: var(--sidebar-color);
     transition: var(--tran-05);
+}
+
+.download-container .download {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: max-content;
+    height: max-content;
+    margin-top: 100px;
+}
+
+.download-container .download .audio-art {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    height: 300px;
+    border-radius: 10px;
+    background: var(--thumbnail-color);
+    margin: 10px 10px 30px 10px;
+    transition: var(--tran-05);
+
+    background-size: cover;
+    background-position: center;
+}
+
+.download-container .download .search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    border: 2px solid var(--text-color);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.download-container .download .search input,
+.download-container .download .search button {
+    border: none;
+    outline: none;
+}
+
+.download-container .download .search input {
+    width: 500px;
+    height: 40px;
+    padding: 0 10px;
+    font-size: 1.2rem;
+    transition: var(--tran-05);
+}
+
+.download-container .download .search input {
+    background: var(--sidebar-color);
+    color: var(--text-color);
+}
+
+.download-container .download .search button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 40px;
+    color: var(--text-color);
+    background: var(--sidebar-color);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: var(--tran-05);
+}
+
+.download-container .download .search button:hover {
+    background: var(--primary-color);
+}
+
+.download-container .download .search button:hover .icon,
+.download-container .download .search button:hover .text{
+    color: var(--sidebar-color);
+}
+
+body.dark .download-container .download .search button:hover .icon,
+body.dark .download-container .download .search button:hover .text {
+    color: var(--text-color);
+}
+
+
+.download-container .download .download-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.download-container .download .download-details {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-top: 50px;
+}
+
+.download-container .download .download-details .detail input {
+    border: none;
+    outline: none;
+    background: var(--sidebar-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+
+    font-size: 1.5rem;
+    font-weight: 600;
+    transition: var(--tran-05);
+}
+
+.download-container .download .download-details .detail .text {
+    border-bottom: 2px solid var(--text-color);
+    padding: 0 5px;
+}
+
+.download-container .download .download-details .detail .icon {
+    padding-left: 25px;
+    font-size: 2rem;
+    transition: var(--tran-05);
+}
+
+.download-container .download .download-details .detail {
+    display: flex;
+    flex-direction: row;
+}
+
+.download-container .download .download-details .download-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    
+    margin-top: 30px;
+}
+
+.download-button-container .download-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    width: 200px;
+    height: 40px;
+    transition: var(--tran-05);
+    background: var(--sidebar-color);
+    color: var(--text-color);
+    font-size: 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--tran-05);
+    border: none;
+    border: 2px solid var(--text-color);
+    border-radius: 20px;
+}
+
+.download-button .icon{
+    margin-right: 8px;
+    font-size: 2rem;
+}
+
+.download-container .download .download-details .download-button:hover {
+    background: var(--primary-color);
+}
+
+.download-container .download .download-details .download-button:hover .icon,
+.download-container .download .download-details .download-button:hover .text {
+    color: var(--sidebar-color);
+}
+
+body.dark .download-container .download .download-details .download-button:hover .icon,
+body.dark .download-container .download .download-details .download-button:hover .text {
+    color: var(--text-color);
+}
+
+.download-details.hidden {
+    opacity: 0;
+}
+
+.icon.active {
+    color: var(--active-icon-color);
+    transform: scale(1.2);
 }

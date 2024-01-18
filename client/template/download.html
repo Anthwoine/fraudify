@@ -1,9 +1,40 @@
 <link rel="stylesheet" href="../css/download-style.css">
 
 <body>
-    <div class="sidebar-container">
-        <div class="sidebar-download">
-            <span>DOWNLOAD</span>
+    <div class="fraudify-download">
+        <div class="download-container">
+            <div class="download">
+                <div class="audio-art"></div>
+                <div class="search">
+                    <input type="text" name="audio-url" class="download-input">
+                    <button class="search-button">
+                        <span class="material-symbols-outlined icon">search</span>
+                        <span class="text">search</span>
+                    </button>
+                </div>
+
+                <div class="download-details hidden">
+                    <div class="download-title detail">
+                        <input type="text" class="title-input text" value="Title" disabled>
+                        <span class="material-symbols-outlined icon icon-title">edit</span>
+                    </div>
+                    <div class="download-artist detail">
+                        <input type="text" class="artist-input text" value="Artist" disabled>
+                        <span class="material-symbols-outlined icon icon-artist">edit</span>
+                    </div>
+
+                    <div class="download-duration detail">
+                        <span class="duration">Duration</span>
+                    </div>
+
+                    <div class="download-button-container">
+                        <button class="download-button">
+                            <span class="material-symbols-outlined icon">download</span>
+                            <span class="text">Download</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
