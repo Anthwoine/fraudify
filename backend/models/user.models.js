@@ -1,4 +1,4 @@
-const sequelizeConfig = require("../config/db.config.js");
+const sequelizeConfig = require("../config/db");
 const Sequelize = require('sequelize');
 
 const userSchema = sequelizeConfig.define("user", {
@@ -31,6 +31,6 @@ const userSchema = sequelizeConfig.define("user", {
     },
 });
 
-sequelize.sync();
+sequelizeConfig.sync();
 
 module.exports = sequelizeConfig.model('user', userSchema);
