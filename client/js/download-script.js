@@ -64,7 +64,22 @@ console.log('download script');
     }
 })();
 
+(function () {
+    const button = document.querySelector('.download-button')
 
+    const artist = document.querySelector('.artist-input');
+    const title = document.querySelector('.title-input');
+    const url = document.querySelector('.download-input');
+
+    button.addEventListener('click', async () => {
+        const urlValue = url.value;
+        const artistValue = artist.value;
+        const titleValue = title.value;
+
+        console.log(urlValue, artistValue, titleValue);
+        await downloadMusic(urlValue, titleValue, artistValue);
+    });
+})();
 
 async function searchMusic(url) {
     const result = await fetch('api/music/info', {
@@ -92,6 +107,25 @@ async function searchImage(title, artist) {
     } else {
         console.log('erreur lors de la récupération de l\'image');
     }
+}
+
+async function downloadMusic(url, title, artist) {
+    const result = await fetch('/api/music/download', {
+        method: 'POST',
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify({ 
+            url : url,
+            title : title,
+            artist : artist 
+        })
+    }); 
+
+    if(result.status === 200) {
+        console.log('ok')
+    }
+
 }
 
 function buildDuration(duration) {
