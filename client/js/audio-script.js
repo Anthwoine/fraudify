@@ -22,7 +22,7 @@ const volumeSlider = document.querySelector('.volume-slider');
 const volumeIcon = document.querySelector('.volume');
 
 let audioIndex = 0;
-let volumeValue = 0.5;
+let volumeValue = 0.20;
 
 let isPlaying = false;
 let isRandom = false;
