@@ -11,7 +11,7 @@
     align-items: center;
     min-height: 100vh; 
     width: 100%;
-    background: rgb(95, 56, 202);
+    background: #695cfe;
 }
 
 .form-box {
@@ -20,9 +20,8 @@
     height: 450px;
     padding: 10px 30px;
     background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.5);
+    border: 3px solid #ccc;
     border-radius: 20px;
-    backdrop-filter: blur(15px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -68,11 +67,11 @@ input:valid ~ label {
     color: #fff;
 }
 
-.inputbox i {
+.inputbox span {
     position: absolute;
     right: 8px;
     color: #fff;
-    font-size: 1.2em;
+    font-size: 1.5rem;
     top: 20px;
 }
 
