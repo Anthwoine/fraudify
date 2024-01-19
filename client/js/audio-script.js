@@ -40,7 +40,6 @@ console.log("trueAudioList : ",trueAudioList);
 if(!audioList || audioList.length === 0) {
     console.log('no music');
 } else {
-    await loadAudio(audioList[audioIndex]);
     updateVolume(volumeValue);
 }
 

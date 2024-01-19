@@ -1,5 +1,5 @@
 const sequelizeConfig = require("../config/db.config");
-const Sequelize = require('sequelize');
+const { Sequelize } = require('sequelize');
 
 const musicSchema = sequelizeConfig.define("music", {
     id: {
