@@ -35,6 +35,11 @@
     --icon-hover-color: black;
     --active-icon-color: #695cfe;
 
+    --success-color: #4a964ce0;
+    --error-color: #b23838e0;
+    --warning-color: #ce8518e0;
+    --info-color: #3872a4e0;
+
     /* Transition */
     --tran-02: all 0.2s ease;
     --tran-03: all 0.3s ease;

@@ -1,3 +1,5 @@
+import { SnackbarBuilder } from "./class/snackbar.js";
+
 const currentAudio = document.createElement("audio");
 
 const overlayBtn = document.querySelector('.overlay-button');
@@ -40,6 +42,7 @@ console.log("trueAudioList : ",trueAudioList);
 if(!audioList || audioList.length === 0) {
     console.log('no music');
 } else {
+    await loadAudio(audioList[audioIndex]);
     updateVolume(volumeValue);
 }
 
@@ -336,3 +339,7 @@ function shuffleArray(array) {
     console.log("array: ", shuffledArray);
     return shuffledArray;
 }
+
+
+
+

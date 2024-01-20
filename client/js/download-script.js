@@ -1,3 +1,5 @@
+import { SnackbarBuilder } from "./class/snackbar.js";
+
 console.log('download script');
 
 (function () {
@@ -22,9 +24,9 @@ console.log('download script');
         const musicInfo = await searchMusic(url);
         if(!musicInfo) return;
 
-        console.log(musicInfo);
+        console.log('musicInfo: ', musicInfo);
 
-        img = musicInfo.image ? musicInfo.image : '../../assets/images/default.png';
+        const img = musicInfo.image ? musicInfo.image : '../../assets/images/default.png';
         audioArt.style.backgroundImage = `url(${img})`;
         title.value = musicInfo.title;
         artist.value = musicInfo.artist;
@@ -56,7 +58,7 @@ console.log('download script');
                 const data = await searchImage(title.value, artist.value);
                 console.log('data: (image)', data);
 
-                img = data ? data : '../../assets/images/default.png';
+                const img = data ? data : '../../assets/images/default.png';
                 const audioArt = document.querySelector('.audio-art');
                 audioArt.style.backgroundImage = `url(${img})`; 
             }
@@ -123,10 +125,19 @@ async function downloadMusic(url, title, artist) {
     }); 
 
     if(result.status === 200) {
-        console.log('ok')
+
     }
 
 }
+
+(function () {
+    const snackbar = new SnackbarBuilder('Téléchargement réussi')
+    .buildInfo();
+
+    console.log(snackbar);
+
+    snackbar.render(document.querySelector('.snackbar-container'));
+})();
 
 function buildDuration(duration) {
     let minutes = Math.floor(duration / 60);

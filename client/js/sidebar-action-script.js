@@ -23,6 +23,7 @@ const loadAction = async () => {
             script.src = `js/${target.getAttribute('page')}-script.js`;
             script.classList.add('action-script');
             script.defer = true;
+            script.type = 'module';
 
             document.head.appendChild(script);
         });
