@@ -125,19 +125,29 @@ async function downloadMusic(url, title, artist) {
     }); 
 
     if(result.status === 200) {
+        const snackbar = new SnackbarBuilder('Téléchargement réussi')
+        .buildSuccess();
 
+        snackbar.render(document.querySelector('.snackbar-container'));
+        return;
     }
 
+    if(result.status === 409) {
+        const snackbar = new SnackbarBuilder('Musique déjà téléchargée')
+        .buildWarning();
+
+        snackbar.render(document.querySelector('.snackbar-container'));
+        return;
+    }
+
+    if(result.status === 500) {
+        const snackbar = new SnackbarBuilder('Erreur lors du téléchargement')
+        .buildError();
+
+        snackbar.render(document.querySelector('.snackbar-container'));
+        return;
+    }
 }
-
-(function () {
-    const snackbar = new SnackbarBuilder('Téléchargement réussi')
-    .buildInfo();
-
-    console.log(snackbar);
-
-    snackbar.render(document.querySelector('.snackbar-container'));
-})();
 
 function buildDuration(duration) {
     let minutes = Math.floor(duration / 60);

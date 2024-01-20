@@ -89,6 +89,18 @@ module.exports.downloadMusic = async (req, res) => {
         return;
     }
 
+    Music.findOne({ where: { url: url } })
+        .then((music) => {
+            if(music) {
+                res.status(409).send("cette musique est déjà dans la base de données");
+                return;
+            }
+        })
+        .catch((error) => {
+            res.status(500).send("erreur lors de la recherche de la musique dans la base de données: " + error);
+            return;
+        });
+
     const music = Music.build({
         title: title,
         artist: artist,

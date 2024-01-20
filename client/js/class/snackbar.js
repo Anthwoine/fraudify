@@ -59,13 +59,13 @@ class Snackbar {
             snackbarElement.classList.add('show');
         }, 10);
 
-        // setTimeout(() => {
-        //     setTimeout(() => {
-        //         targetElement.removeChild(snackbarElement);
+        setTimeout(() => {
+            setTimeout(() => {
+                targetElement.removeChild(snackbarElement);
                 
-        //     }, this.duration);
-        //     snackbarElement.classList.remove('show');
-        // }, (this.duration-1000));
+            }, this.duration);
+            snackbarElement.classList.remove('show');
+        }, (this.duration-1000));
     }
 }
 
