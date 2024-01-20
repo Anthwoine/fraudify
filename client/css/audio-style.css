@@ -173,3 +173,12 @@
 .player .options .icon.active {
     color: var(--active-icon-color);
 }
+
+.player .like.active {
+    color: var(--active-icon-color);
+    font-variation-settings: 'FILL' 1;
+}
+
+.player .like.active:hover {
+    color: #5445ff;
+}

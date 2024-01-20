@@ -1,11 +1,14 @@
-const loginEmail = document.querySelector(".login-email");
+import { SnackbarBuilder } from "./class/snackbar.js";
+import { setCookie } from "./utils.js";
+
+const loginUsername = document.querySelector(".login-username");
 const loginPassword = document.querySelector(".login-password");
 const loginButton = document.querySelector(".login-button");
 
 
 const signupUsername = document.querySelector(".signup-username");
-const signupEmail = document.querySelector(".signup-email");
 const signupPassword = document.querySelector(".signup-password");
+const signupConfirmPassword = document.querySelector(".signup-confirm-password");
 const signupButton = document.querySelector(".signup-button");
 
 
@@ -39,15 +42,42 @@ passwordResetPage.addEventListener("click", () => {
 
 signupButton.addEventListener("click", async () => {
     const username = signupUsername.value;
-    const email = signupEmail.value;
     const password = signupPassword.value;
+    const confirmPassword = signupConfirmPassword.value;
     
-    if(!username || !password || !email) {
-        alert("Please enter all fields");
+    
+
+    if(!username || !password || !confirmPassword) {
+        const snackbar = new SnackbarBuilder("Please enter all fields")
+            .buildWarning()
+            .render(document.querySelector(".snackbar-container"));
         return;
+
+    } else if(password !== confirmPassword) {
+        const snackbar = new SnackbarBuilder("Passwords do not match")
+            .buildWarning()
+            .render(document.querySelector(".snackbar-container"));
+        return
+    }
+    
+    const result = await signup(username,password);
+    console.log("signup result: ", result);
+    if(!result) {
+        const snackbar = new SnackbarBuilder("Account creation failed")
+            .buildError()
+            .render(document.querySelector(".snackbar-container"));
+    } else if(result.status === 200) {
+        const snackbar = new SnackbarBuilder("Account created successfully")
+            .buildSuccess()
+            .render(document.querySelector(".snackbar-container"));
+    } else if (result.status === 409) {
+        const snackbar = new SnackbarBuilder("Username already exists")
+            .buildWarning()
+            .render(document.querySelector(".snackbar-container"));
     } else {
-        console.log(username, email, password);
-        await signup(username, email, password);
+        const snackbar = new SnackbarBuilder("Account creation failed")
+            .buildError()
+            .render(document.querySelector(".snackbar-container"));
     }
 });
 
@@ -58,14 +88,34 @@ signupButton.addEventListener("click", async () => {
 loginButton.addEventListener("click", async () => {
     console.log("login button clicked");
 
-    const email = loginEmail.value;
+    const username = loginUsername.value;
     const password = loginPassword.value;
 
-    if(!email || !password) {
-        alert("Please enter all fields");
-        return;
+    if(!username || !password) {
+        new SnackbarBuilder("Please enter all fields")
+            .buildWarning()
+            .render(document.querySelector(".snackbar-container"));
     } else {
-        await login(email, password);
+        const result = await login(username, password);
+        if(!result || result.status === 500) {
+            new SnackbarBuilder("Login failed")
+                .buildError()
+                .render(document.querySelector(".snackbar-container"));
+            return
+        } else if (result.status === 404) {
+            new SnackbarBuilder("User not found")
+                .buildWarning()
+                .render(document.querySelector(".snackbar-container"));
+            return
+        } else {
+            const data = await result.json();
+            setCookie("token", data.token, 1);
+            setCookie("username", data.username, 1);
+            setCookie("id", data.id, 1);
+            setCookie("role", data.role, 1);
+
+            document.location.href = "/fraudify.html";
+        }
     }
 });
 
@@ -79,41 +129,41 @@ loginButton.addEventListener("click", async () => {
 
 
 
-const signup = async (username, email, password) => {
+const signup = async (username, password) => {
     try {
-        const payload = {username, email, password};
+        const payload = {username, password};
 
         const result = await fetch("/api/user", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
         });
-
-        const data = await result.json();
-        return;
+        return result;
         
     } catch(err) {
-        console.log(err);
-        return;
+        return null;
     }
 };
 
-const login = async (email, password) => {
+const login = async (username, password) => {
     try {
         const result = await fetch("/api/user/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({email, password})
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
         });
 
-        const data = await result.json();
-        setCookie("token", data.token, 1);
-        window.location.href = "/player.html";
-        return;
+        return result;
 
     } catch(err) {
         console.log(err);
@@ -122,30 +172,3 @@ const login = async (email, password) => {
 };
 
 
-function setCookie(cookieName, cookieValue, expirationDays) {
-    const date = new Date();
-    date.setTime(date.getTime() + (expirationDays * 24 * 60 * 60 * 1000));
-
-    const expires = "expires=" + date.toUTCString();
-    document.cookie = cookieName + "=" + cookieValue + ";" + expires + ";path=/";
-}
-
-function getCookie(cookieName) {
-    const name = cookieName + "=";
-    const decodedCookie = decodeURIComponent(document.cookie);
-    const cookieArray = decodedCookie.split(";");
-    for(let i = 0; i < cookieArray.length; i++) {
-        let cookie = cookieArray[i];
-        while(cookie.charAt(0) == " ") {
-            cookie = cookie.substring(1);
-        }
-        if(cookie.indexOf(name) == 0) {
-            return cookie.substring(name.length, cookie.length);
-        }
-    }
-    return "";
-}
-
-function deleteCookie(cookieName) {
-    document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-}

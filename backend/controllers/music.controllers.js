@@ -1,8 +1,9 @@
 const ytdl = require('ytdl-core');
 const fs = require('fs');
 const path = require('path');
-const Music = require('../models/music.models');
 
+const Music = require('../models/music.models');
+const UserMusicInteraction = require('../models/user-music-interaction.models');
 
 
 module.exports.getAllMusic = async (req, res) => {
@@ -137,6 +138,133 @@ module.exports.downloadMusic = async (req, res) => {
             return;
         });
 };
+
+module.exports.likeMusic = async (req, res) => {
+    const userId = req.body.userId;
+    const musicId = req.body.musicId;
+
+    if(!userId || !musicId) {
+        res.status(400).send("Bad request");
+        return;
+    }
+
+    UserMusicInteraction.findOne({ where: { userId: userId, musicId: musicId } })
+        .then((interaction) => {
+            if(!interaction) {
+                return res.status(404).send("aucune interaction trouvée");
+            }
+
+            const newInteraction = UserMusicInteraction.build({
+                id: interaction.id,
+                userId: interaction.userId,
+                musicId: interaction.musicId,
+                liked: !interaction.liked,
+                timesListened: interaction.timesListened
+            });
+            
+            UserMusicInteraction.update(newInteraction.dataValues, { where: { id: interaction.id } })
+                .then(() => res.status(200).json(interaction))
+                .catch((error) => res.status(500).send("erreur lors de la modification de l'interaction (id): " + error));
+        })
+};
+
+module.exports.getUserLikedMusic = async (req, res) => {
+    const userId = req.params.userId;
+
+    if(!userId) {
+        res.status(400).send("Bad request");
+        return;
+    }
+
+    UserMusicInteraction.findAll({ where: { userId: userId, liked: true } })
+        .then((interactions) => {
+            if(!interactions) {
+                return res.status(404).send("aucune interaction trouvée");
+            }
+
+            res.status(200).json(interactions);
+        })
+        .catch((error) => res.status(500).send("erreur lors de la récupération des interactions (id): " + error));
+};
+
+module.exports.userListenedMusic = async (req, res) => {
+    const userId = req.body.userId;
+    const musicId = req.body.musicId;
+
+    if(!userId || !musicId) {
+        res.status(400).send("Bad request");
+        return;
+    }
+
+    UserMusicInteraction.findOne({ where: { userId: userId, musicId: musicId } })
+        .then((interaction) => {
+            if(!interaction) {
+                return res.status(404).send("aucune interaction trouvée");
+            }
+
+            const newInteraction = UserMusicInteraction.build({
+                id: interaction.id,
+                userId: interaction.userId,
+                musicId: interaction.musicId,
+                liked: interaction.liked,
+                timesListened: interaction.timesListened + 1
+            });
+            
+            UserMusicInteraction.update(newInteraction.dataValues, { where: { id: interaction.id } })
+                .then(() => res.status(200).json(interaction))
+                .catch((error) => res.status(500).send("erreur lors de la modification de l'interaction (id): " + error));
+        })
+};
+
+module.exports.getInteraction = async (req, res) => {
+    const userId = req.body.userId;
+    const musicId = req.body.musicId;
+
+    if(!userId || !musicId) {
+        res.status(400).send("Bad request");
+        return;
+    }
+
+    UserMusicInteraction.findOne({ where: { userId: userId, musicId: musicId } })
+        .then((interaction) => {
+            if(!interaction) {
+                return res.status(404).send("aucune interaction trouvée");
+            }
+
+            res.status(200).json(interaction);
+        })
+        .catch((error) => res.status(500).send("erreur lors de la récupération de l'interaction (id): " + error));
+};
+
+module.exports.createInteraction = async (req, res) => {
+    const userId = req.body.userId;
+    const musicId = req.body.musicId;
+
+    if(!userId || !musicId) {
+        res.status(400).send("Bad request");
+        return;
+    }
+
+    UserMusicInteraction.findOne({ where: { userId: userId, musicId: musicId } })
+        .then((interaction) => {
+            if(interaction) {
+                return res.status(200).send(interaction);
+            } else {
+                const interaction = UserMusicInteraction.build({
+                    userId: userId,
+                    musicId: musicId,
+                    liked: false,
+                    timesListened: 0
+                });
+            
+                interaction.save()
+                    .then(() => res.status(200).send("interaction ajoutée"))
+                    .catch((error) => res.status(500).send("erreur lors de l'ajout de l'interaction : " + error));            
+            }
+        })
+        .catch((error) => res.status(500).send("erreur lors de la recherche de l'interaction dans la base de données: " + error));
+
+    };
 
 
 

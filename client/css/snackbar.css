@@ -1,0 +1,69 @@
+
+:root {
+    --success-color: #4a964ce0;
+    --error-color: #b23838e0;
+    --warning-color: #ce8518e0;
+    --info-color: #3872a4e0;
+    --tran-02: all 0.2s ease;
+}
+
+.snackbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    opacity: 0;
+    transform: translateY(100%);
+    background: var(--sidebar-color);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.snackbar .snackbar-message {
+    font-size: 1.2rem;
+    color: #fff;
+}   
+
+.snackbar .icon {
+    position: absolute;
+    left: 10px;
+    font-size: 2rem;
+    color: #fff;
+}
+
+.snackbar .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #fff;
+    transition: var(--tran-02);
+}
+
+.snackbar .close:hover {
+    transform: scale(1.2);
+}
+
+.snackbar.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.snackbar.success {
+    background: var(--success-color);
+}
+
+.snackbar.error {
+    background: var(--error-color);
+}
+
+.snackbar.info {
+    background: var(--info-color);
+}
+
+.snackbar.warning {
+    background: var(--warning-color);
+}

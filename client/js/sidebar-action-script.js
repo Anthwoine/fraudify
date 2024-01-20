@@ -1,3 +1,5 @@
+import { setCookie, deleteCookie, getCookie } from "./utils.js";
+
 const loadAction = async () => {
     document.querySelectorAll('.action').forEach((button) => {
         button.addEventListener('click', async (event) => {
@@ -33,7 +35,13 @@ const loadAction = async () => {
 loadHome();
 loadAction();
 
-
+document.querySelector('.logout').addEventListener('click', () => {
+    deleteCookie('token');
+    deleteCookie('username');
+    deleteCookie('userId');
+    deleteCookie('role');
+    document.location.href = '/login.html';
+});
 
 
 

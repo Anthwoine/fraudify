@@ -46,7 +46,7 @@ module.exports.addUser = async (req, res) => {
     const password = req.body.password;
 
 
-    if(!username || !password || !email) {
+    if(!username || !password) {
         res.status(400).send('pb body params');
         return;
     }
@@ -54,14 +54,25 @@ module.exports.addUser = async (req, res) => {
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(password, salt);
 
-    const user = User.build({
-        username: username,
-        password: hash,
-    });
-
-    user.save()
-        .then(() => res.status(200).send("utilisateur ajouté"))
-        .catch((error) => res.status(500).send("erreur lors de l'ajout de l'utilisateur : " + error));
+    User.findOne({ where: { username: username } })
+        .then((user) => {
+            if(user) {
+                res.status(409).send("un utilisateur existe déjà avec cet username");
+                return;
+            } else {
+                const user = User.build({
+                    username: username,
+                    password: hash,
+                });
+            
+                user.save()
+                    .then(() => res.status(200).send("utilisateur ajouté"))
+                    .catch((error) => res.status(500).send("erreur lors de l'ajout de l'utilisateur : " + error));
+            }
+        })
+        .catch((error) => {
+            res.status(500).send("erreur lors de la récupération de l'utilisateur (username): " + error);
+        });
 };
 
 
@@ -70,9 +81,8 @@ module.exports.updateUser = async (req, res) => {
     const id = req.body.id;
     const username = req.body.username;
     const password = req.body.password;
-    const email = req.body.email;
 
-    if(!id || !username || !password || !email) {
+    if(!id || !username || !password) {
         res.status(400).send('pb body params');
         return;
     }
@@ -112,7 +122,7 @@ module.exports.login = async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
-    if(!email || !password) {
+    if(!username || !password) {
         res.status(400).send('pb body params');
         return;
     }
@@ -120,13 +130,18 @@ module.exports.login = async (req, res) => {
     User.findOne({ where: { username: username } })
         .then(async (user) => {
             if(!user) {
-                res.status(404).send("aucun utilisateur trouvé avec cet email");
+                res.status(404).send("aucun utilisateur trouvé avec cet username");
                 return;
             }
 
             if(await validatePassword(password, user.password)) {
                 const token = getJWT(user);
-                res.status(200).send({access_token : token});
+                res.status(200).send({
+                    token : token,
+                    id: user.id,
+                    username: user.username,
+                    role: user.role
+                });
                 return;
             } else {
                 res.status(500).send("mdp incorrect");

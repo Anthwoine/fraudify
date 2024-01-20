@@ -1,12 +1,11 @@
-import { SnackbarBuilder } from "./class/snackbar.js";
-
-const currentAudio = document.createElement("audio");
+const Audio = document.createElement("audio");
 
 const overlayBtn = document.querySelector('.overlay-button');
 const overlay = document.querySelector('.music-overlay');
 
 const shuffle = document.querySelector('.shuffle');
 const repeat = document.querySelector('.repeat');
+const likeBtn = document.querySelector('.like');
 
 const previous = document.querySelector('.previous');
 const next = document.querySelector('.next');
@@ -26,6 +25,9 @@ const volumeIcon = document.querySelector('.volume');
 let audioIndex = 0;
 let volumeValue = 0.20;
 
+let currentAudio;
+let currentInteraction;
+
 let isPlaying = false;
 let isRandom = false;
 let isRepeat = false;
@@ -35,17 +37,16 @@ const imagePath = "../../../assets/images/";
 const defaultImage = imagePath + "default.png";
 
 let audioList = await getMusic();
-const trueAudioList = Array.from(audioList);
+const trueAudioList = audioList.slice();
 
-console.log("trueAudioList : ",trueAudioList);
-
-if(!audioList || audioList.length === 0) {
-    console.log('no music');
-} else {
-    await loadAudio(audioList[audioIndex]);
-    updateVolume(volumeValue);
-}
-
+(async function() {
+    if(!audioList || audioList.length === 0) {
+        console.log('no music');
+    } else {
+        await loadAudio(audioList[audioIndex]);
+        updateVolume(volumeValue);
+    }
+})();
 
 
 overlayBtn.addEventListener('click', () => {
@@ -56,32 +57,34 @@ overlayBtn.addEventListener('click', () => {
 
 playPause.addEventListener('click', () => {
     if(!isPlaying) {
-        currentAudio.play();
+        Audio.play();
         isPlaying = true;
         playPause.textContent = 'pause_circle';
     } else {
-        currentAudio.pause();
+        Audio.pause();
         isPlaying = false;
         playPause.textContent = 'play_circle';
     }
 });
 
 previous.addEventListener('click', () => {
-    if(currentAudio.currentTime < 5) {
+    if(Audio.currentTime < 5) {
         previousAudio();
     } else {
-        currentAudio.currentTime = 0;
+        Audio.currentTime = 0;
     }
 });
 
 next.addEventListener('click', () => {
     if(isRepeat) {
-        currentAudio.currentTime = 0;
-        currentAudio.play();
+        Audio.currentTime = 0;
+        Audio.play();
     } else {
         nextAudio();
     }
 });
+
+
 
 shuffle.addEventListener('click', async () => {
     isRandom = !isRandom;
@@ -105,17 +108,21 @@ repeat.addEventListener('click', () => {
     repeat.classList.toggle('active', isRepeat);
 });
 
-
-
-currentAudio.addEventListener('timeupdate', () => {
-    audioSlider.value = currentAudio.currentTime;
-    currentTime.textContent = buildDuration(currentAudio.currentTime);
+likeBtn.addEventListener('click', () => {
+    likeBtn.classList.toggle('active');
 });
 
-currentAudio.addEventListener('ended', () => {
+
+
+Audio.addEventListener('timeupdate', () => {
+    audioSlider.value = Audio.currentTime;
+    currentTime.textContent = buildDuration(Audio.currentTime);
+});
+
+Audio.addEventListener('ended', () => {
     if(isRepeat) {
-        currentAudio.currentTime = 0;
-        currentAudio.play();
+        Audio.currentTime = 0;
+        Audio.play();
     } else {
         nextAudio();
     }
@@ -127,7 +134,7 @@ currentAudio.addEventListener('ended', () => {
 
 audioSlider.addEventListener('input', () => {
     currentTime.textContent = buildDuration(audioSlider.value);
-    currentAudio.currentTime = audioSlider.value;
+    Audio.currentTime = audioSlider.value;
 });
 
 volumeSlider.addEventListener('input', () => {
@@ -153,9 +160,10 @@ volumeIcon.addEventListener('click', () => {
 
 async function loadAudio(audio) {
     try {
-        currentAudio.src = `../../../assets/music/${audio.title}.mp3`;
-        currentAudio.load();
+        Audio.src = `../../../assets/music/${audio.title}.mp3`;
+        Audio.load();
     } catch (error) {}
+
 
     title.textContent = audio.title;
     artist.textContent = audio.artist;
@@ -164,6 +172,12 @@ async function loadAudio(audio) {
     audioSlider.setAttribute('max', audio.duration);
     currentTime.textContent = '0:00';
     duration.textContent = buildDuration(audio.duration);
+
+    currentAudio = audio;
+    currentInteraction = await getInteraction(audio.id, 1);
+
+    console.log("interaction: ", currentInteraction);
+
     await loadOverlay(audio);
 }
 
@@ -184,9 +198,9 @@ async function loadOverlay(audio) {
     const list = audioList.slice();
     const currentIndex = audioIndex;
     
-    const currentAudio = list.splice(currentIndex, 1)[0];
+    const Audio = list.splice(currentIndex, 1)[0];
     const beforeAudio = list.splice(0, currentIndex);
-    list.unshift(currentAudio);    
+    list.unshift(Audio);    
     list.push(...beforeAudio);
 
     await loadPlaylist(list);
@@ -239,7 +253,7 @@ function buildDuration(duration) {
 
 function updateVolume(volumeValue) {
     volumeSlider.value = volumeValue;
-    currentAudio.volume = volumeValue;
+    Audio.volume = volumeValue;
     setVolumeIcon(volumeValue);
 }
 
@@ -264,18 +278,17 @@ async function loadImage(track) {
     const imageName = `${artist} ${title}`.replace(/[^a-zA-Z0-9]/g, '_');
     let img = `${imagePath}/${imageName}.png`;
 
-    await fetch(img)
-            .then((response) => {
-                if(!(response.status === 200)) {
-                    img = defaultImage;
-                    return;
-                }
-            })
-            .catch((error) => {
-                img = defaultImage;
-            }
-    );
-    return img;
+    try {
+        const response = await fetch(img);
+
+        if (!response.ok) {
+            throw new Error('Image not found');
+        }
+
+        return img;
+    } catch {
+        return defaultImage;
+    }
 }
 
 
@@ -286,7 +299,7 @@ function nextAudio() {
     }
 
     loadAudio(audioList[audioIndex]);
-    isPlaying ? currentAudio.play() : currentAudio.pause();
+    isPlaying ? Audio.play() : Audio.pause();
 }
 
 
@@ -301,18 +314,18 @@ function previousAudio() {
     }
 
     loadAudio(audioList[audioIndex]);
-    isPlaying ? currentAudio.play() : currentAudio.pause();
+    isPlaying ? Audio.play() : Audio.pause();
 }
 
 
 function audioPlay() {
-    currentAudio.play();
+    Audio.play();
     isPlaying = true;
     playPause.textContent = 'pause_circle';
 }
 
 function audioPause() {
-    currentAudio.pause();
+    Audio.pause();
     isPlaying = false;
     playPause.textContent = 'play_circle';
 }
@@ -322,6 +335,45 @@ async function getMusic() {
         const response = await fetch(`/api/music`);
         const music = await response.json();
         return music;
+    } catch (error) {
+        return;
+    }
+}
+
+async function likeMusic(musicId, userId) {
+    try {
+        const response = await fetch(`/api/music/like`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                musicId: musicId,
+                userId: userId,
+            })
+        });
+
+        const music = await response.json();
+        return music;
+    } catch (error) {
+        return;
+    }
+};
+
+async function getInteraction(musicId, userId) {
+    try {
+        const response = await fetch(`/api/music/interaction/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                musicId: musicId,
+                userId: userId,
+            })
+        });
+        const interaction = await response.json();
+        return interaction;
     } catch (error) {
         return;
     }

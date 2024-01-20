@@ -194,7 +194,7 @@ body.dark .sidebar.close .toggle {
     transform: translateY(-50%);
 }
 
-.sidebar li .action {
+.sidebar li .action-btn {
     height: 100%;
     width: 100%;
     display: flex;
@@ -234,27 +234,27 @@ body.dark .sidebar.close .toggle {
     transition: var(--tran-05);
 }
 
-.sidebar li .action:hover {
+.sidebar li .action-btn:hover {
     background: var(--primary-color);
 }
 
-.sidebar li .action:hover .icon,
-.sidebar li .action:hover .text {
+.sidebar li .action-btn:hover .icon,
+.sidebar li .action-btn:hover .text {
     color: var(--sidebar-color);
 }
 
-body.dark .sidebar li .action:hover .icon,
+body.dark .sidebar li .action-btn:hover .icon,
 body.dark .sidebar li .action:hover .text {
     color: var(--text-color);
 }
 
-.sidebar li .action.active .icon,
-.sidebar li .action.active .text {
+.sidebar li .action-btn.active .icon,
+.sidebar li .action-btn.active .text {
     color: var(--active-icon-color);
 }
 
-.sidebar li .action.active:hover .icon,
-.sidebar li .action.active:hover .text {
+.sidebar li .action-btn.active:hover .icon,
+.sidebar li .action-btn.active:hover .text {
     color: var(--sidebar-color);
 }
 
